@@ -66,3 +66,45 @@ public:
         return costo;
     }
 };
+
+---------
+
+
+#include <iostream>
+#include <string>
+
+class pelicula {
+private:
+    static int autonumerico;
+    int codigo;
+    std::string titulo;
+    std::string director;
+    bool estreno;
+    float precioBase;
+    std::string tipoPelicula;
+
+public:
+    // Constructor por defecto
+    pelicula() {
+        codigo = autonumerico++;
+        titulo = "Sin título";
+        director = "Sin director";
+        estreno = false;
+        precioBase = 0.0;
+        tipoPelicula = "N";
+    }
+
+    // Constructor con parámetros
+    pelicula(int codigo, std::string titulo, std::string director, bool estreno, float precioBase, std::string tipoPelicula)
+        : codigo(codigo), titulo(titulo), director(director), estreno(estreno), precioBase(precioBase), tipoPelicula(tipoPelicula) {
+        autonumerico++;
+    }
+
+    // Constructor copia
+    pelicula(const pelicula& otraPelicula) {
+        codigo = autonumerico++;
+        titulo = otraPelicula.titulo;
+        director = otraPelicula.director;
+        estreno = otraPelicula.estreno;
+        precioBase = otraPelicula.precioBase;
+        tipoPelicula = otraP
