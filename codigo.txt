@@ -68,8 +68,6 @@ public:
 };
 
 ---------
-
-
 #include <iostream>
 #include <string>
 
@@ -107,4 +105,44 @@ public:
         director = otraPelicula.director;
         estreno = otraPelicula.estreno;
         precioBase = otraPelicula.precioBase;
-        tipoPelicula = otraP
+        tipoPelicula = otraPelicula.tipoPelicula;
+    }
+
+    void listarInformacion() {
+        std::cout << "Código: " << codigo << std::endl;
+        std::cout << "Título: " << titulo << std::endl;
+        std::cout << "Director: " << director << std::endl;
+        std::cout << "Estreno: " << (estreno ? "Sí" : "No") << std::endl;
+        std::cout << "Precio Base: " << precioBase << std::endl;
+        std::cout << "Tipo Película: " << tipoPelicula << std::endl;
+    }
+
+    float calcularCosto() {
+        float costo = precioBase;
+        if (tipoPelicula == "I") {
+            costo *= 1.30;
+        } else if (!estreno) {
+            costo *= 0.8;
+        }
+        return costo;
+    }
+};
+
+// Inicialización del atributo estático autonumerico
+int pelicula::autonumerico = 1;
+
+int main() {
+    pelicula pelicula1;  // Constructor por defecto
+    pelicula1.listarInformacion();
+    std::cout << "Costo: " << pelicula1.calcularCosto() << std::endl;
+
+    pelicula pelicula2(100, "Matrix", "Wachowski", true, 10.0, "I");  // Constructor con parámetros
+    pelicula2.listarInformacion();
+    std::cout << "Costo: " << pelicula2.calcularCosto() << std::endl;
+
+    pelicula pelicula3 = pelicula2;  // Constructor copia
+    pelicula3.listarInformacion();
+    std::cout << "Costo: " << pelicula3.calcularCosto() << std::endl;
+
+    return 0;
+}
