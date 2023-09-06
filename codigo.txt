@@ -1,60 +1,13 @@
-// cuentaObjeto.h
-
-class cuentaObjeto
-{
-private:
-    int objCreados;
-    int objDestruidos;
-
-public:
-    cuentaObjeto();
-    cuentaObjeto cuentaObjeto();
-    cuentaObjeto metodo();
-    void mostrarResumen();
-    ~cuentaObjeto();
-};
-
-// cuentaObjeto::cuentaObjeto(/* args */)
-// {
-// }
-
-// cuentaObjeto::~cuentaObjeto()
-// {
-// }
-
-//Ejercicio1
-
-#include <iostream>
-#include "cuentaObjeto.h"
-using namespace std;
-
-int main() {
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	
-    cuentaObjeto obj1;
-    cuentaObjeto::mostrarResumen(); //1era
-    {
-        cuentaObjeto obj2(obj1);
-        cuentaObjeto::mostrarResumen(); //2da invc
-        cuentaObjeto *obj3 = new CuentaObjeto();
-        *obj3 = obj2.metodo(*obj3);
-        cuentaObjeto::mostrarResumen(); //3ra
-    }
-    cuentaObjeto::mostrarResumen();
-
-    return 0;
-}
-
----------
-
 #include <iostream>
 
+/*
 class cuentaObjeto {
 private:
-    static int objCreados;       // Declarar como estático para contar objetos en toda la clase
-    static int objDestruidos;    // Declarar como estático para contar objetos en toda la clase
-
+    // atributos
+    static int objCreados;  //estatico    
+    static int objDestruidos; //estatico  
 public:
+    //metodo 
     cuentaObjeto() {
         objCreados++;
     }
@@ -76,32 +29,40 @@ public:
         objDestruidos++;
     }
 };
+*/ 
 
-// Inicializar los contadores estáticos
-int cuentaObjeto::objCreados = 0;
-int cuentaObjeto::objDestruidos = 0;
-
-int main() {
-    std::cout << "!!!Hello World!!!" << std::endl;
-
-    cuentaObjeto obj1;
-    cuentaObjeto::mostrarResumen(); // Mostrar el resumen después de la primera creación
-
-    {
-        cuentaObjeto obj2(obj1);
-        cuentaObjeto::mostrarResumen(); // Mostrar el resumen después de la segunda creación
-
-        cuentaObjeto *obj3 = new cuentaObjeto();
-        *obj3 = obj2.metodo();
-        cuentaObjeto::mostrarResumen(); // Mostrar el resumen después de la tercera creación
-
-        delete obj3; // Liberar la memoria del objeto creado dinámicamente
+class pelicula {
+private:
+    // atributos
+    static int autonumerico;  //estatico    
+    int codigo; 
+    std::string titulo;
+    std::string director;
+    bool estreno;
+    float precioBase;
+    std::string tipoPelicula; //{N, I}
+public:
+    //metodo 
+    void listarInformacion(){
+        std::cout << "autonum: " << autonumerico << std::endl;
+        std::cout << "cod: " << codigo << std::endl;
+        std::cout << "tit: " << titulo << std::endl;
+        // ...
     }
 
-    cuentaObjeto::mostrarResumen(); // Mostrar el resumen final
-
-    return 0;
-}
-
-
-
+    float calcularCosto(){
+        float costo, precioBase;
+        costo = precioBase;
+        if (tipoPelicula == "I")
+        {
+            costo = costo*1.30;
+        }else
+        {
+            if (estreno == 0)
+            {
+                costo = costo*0.8;
+            }
+        }
+        return costo;
+    }
+};
