@@ -1,148 +1,98 @@
 #include <iostream>
 
-/*
-class cuentaObjeto {
-private:
-    // atributos
-    static int objCreados;  //estatico    
-    static int objDestruidos; //estatico  
+class Nodo {
 public:
-    //metodo 
-    cuentaObjeto() {
-        objCreados++;
-    }
+    int valor;
+    Nodo* siguiente;
 
-    cuentaObjeto(const cuentaObjeto&) {
-        objCreados++;
-    }
-
-    cuentaObjeto& metodo() {
-        return *this;
-    }
-
-    static void mostrarResumen() {
-        std::cout << "Objetos creados: " << objCreados << std::endl;
-        std::cout << "Objetos destruidos: " << objDestruidos << std::endl;
-    }
-
-    ~cuentaObjeto() {
-        objDestruidos++;
-    }
+    Nodo(int val) : valor(val), siguiente(nullptr) {}
 };
-*/ 
 
-class pelicula {
+class Fila {
 private:
-    // atributos
-    static int autonumerico;  //estatico    
-    int codigo; 
-    std::string titulo;
-    std::string director;
-    bool estreno;
-    float precioBase;
-    std::string tipoPelicula; //{N, I}
+    Nodo* frente;
+    Nodo* final;
+
 public:
-    //metodo 
-    void listarInformacion(){
-        std::cout << "autonum: " << autonumerico << std::endl;
-        std::cout << "cod: " << codigo << std::endl;
-        std::cout << "tit: " << titulo << std::endl;
-        // ...
+    Fila() : frente(nullptr), final(nullptr) {}
+
+    ~Fila() {
+        while (!FilaVacia()) {
+            Defila();
+        }
     }
 
-    float calcularCosto(){
-        float costo, precioBase;
-        costo = precioBase;
-        if (tipoPelicula == "I")
-        {
-            costo = costo*1.30;
-        }else
-        {
-            if (estreno == 0)
-            {
-                costo = costo*0.8;
+    bool FilaVacia() {
+        return frente == nullptr;
+    }
+
+    void Enfila(int valor) {
+        Nodo* nuevoNodo = new Nodo(valor);
+        if (FilaVacia()) {
+            frente = final = nuevoNodo;
+        } else {
+            final->siguiente = nuevoNodo;
+            final = nuevoNodo;
+        }
+    }
+
+    int Frente() {
+        if (!FilaVacia()) {
+            return frente->valor;
+        } else {
+            std::cerr << "La fila está vacía." << std::endl;
+            return -1; // Valor sentinela para indicar un error o fila vacía
+        }
+    }
+
+    void Defila() {
+        if (!FilaVacia()) {
+            Nodo* temp = frente;
+            frente = frente->siguiente;
+            delete temp;
+        } else {
+            std::cerr << "La fila está vacía. No se puede desencolar." << std::endl;
+        }
+    }
+
+    void Mostrar() {
+        Nodo* actual = frente;
+        while (actual != nullptr) {
+            std::cout << actual->valor << " ";
+            actual = actual->siguiente;
+        }
+        std::cout << std::endl;
+    }
+
+    int ContarX(int x) {
+        Nodo* actual = frente;
+        int contador = 0;
+        while (actual != nullptr) {
+            if (actual->valor == x) {
+                contador++;
             }
+            actual = actual->siguiente;
         }
-        return costo;
+        return contador;
     }
 };
-
----------
-#include <iostream>
-#include <string>
-
-class pelicula {
-private:
-    static int autonumerico;
-    int codigo;
-    std::string titulo;
-    std::string director;
-    bool estreno;
-    float precioBase;
-    std::string tipoPelicula;
-
-public:
-    // Constructor por defecto
-    pelicula() {
-        codigo = autonumerico++;
-        titulo = "Sin título";
-        director = "Sin director";
-        estreno = false;
-        precioBase = 0.0;
-        tipoPelicula = "N";
-    }
-
-    // Constructor con parámetros
-    pelicula(int codigo, std::string titulo, std::string director, bool estreno, float precioBase, std::string tipoPelicula)
-        : codigo(codigo), titulo(titulo), director(director), estreno(estreno), precioBase(precioBase), tipoPelicula(tipoPelicula) {
-        autonumerico++;
-    }
-
-    // Constructor copia
-    pelicula(const pelicula& otraPelicula) {
-        codigo = autonumerico++;
-        titulo = otraPelicula.titulo;
-        director = otraPelicula.director;
-        estreno = otraPelicula.estreno;
-        precioBase = otraPelicula.precioBase;
-        tipoPelicula = otraPelicula.tipoPelicula;
-    }
-
-    void listarInformacion() {
-        std::cout << "Código: " << codigo << std::endl;
-        std::cout << "Título: " << titulo << std::endl;
-        std::cout << "Director: " << director << std::endl;
-        std::cout << "Estreno: " << (estreno ? "Sí" : "No") << std::endl;
-        std::cout << "Precio Base: " << precioBase << std::endl;
-        std::cout << "Tipo Película: " << tipoPelicula << std::endl;
-    }
-
-    float calcularCosto() {
-        float costo = precioBase;
-        if (tipoPelicula == "I") {
-            costo *= 1.30;
-        } else if (!estreno) {
-            costo *= 0.8;
-        }
-        return costo;
-    }
-};
-
-// Inicialización del atributo estático autonumerico
-int pelicula::autonumerico = 1;
 
 int main() {
-    pelicula pelicula1;  // Constructor por defecto
-    pelicula1.listarInformacion();
-    std::cout << "Costo: " << pelicula1.calcularCosto() << std::endl;
+    Fila miFila;
+    
+    miFila.Enfila(1);
+    miFila.Enfila(2);
+    miFila.Enfila(3);
+    miFila.Enfila(2);
+    miFila.Enfila(4);
+    miFila.Enfila(2);
 
-    pelicula pelicula2(100, "Matrix", "Wachowski", true, 10.0, "I");  // Constructor con parámetros
-    pelicula2.listarInformacion();
-    std::cout << "Costo: " << pelicula2.calcularCosto() << std::endl;
+    std::cout << "Elementos en la fila: ";
+    miFila.Mostrar();
 
-    pelicula pelicula3 = pelicula2;  // Constructor copia
-    pelicula3.listarInformacion();
-    std::cout << "Costo: " << pelicula3.calcularCosto() << std::endl;
+    int x = 2;
+    int cantidadX = miFila.ContarX(x);
+    std::cout << "Cantidad de elementos iguales a " << x << ": " << cantidadX << std::endl;
 
     return 0;
 }
