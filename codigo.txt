@@ -13,6 +13,7 @@ class Cadete
     private string nombre;
     private string direccion;
     private string telefono;
+    // 
     // private List<Pedido> listadoPedidos = new List<Pedido>();
     // public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
 
@@ -28,16 +29,16 @@ class Cadete
         this.telefono = telefono;
     }
 
-    public decimal CalcularJornal()
-    {
-        decimal jornalBase = 500; // Define el jornal base
-        int cantidadPedidos = ListadoPedidos.Count; // Cantidad de pedidos asignados
+    // public decimal CalcularJornal()
+    // {
+    //     decimal jornalBase = 500; // Define el jornal base
+    //     int cantidadPedidos = ListadoPedidos.Count; // Cantidad de pedidos asignados
 
-        // Calcula el jornal total
-        decimal jornalTotal = jornalBase * cantidadPedidos;
+    //     // Calcula el jornal total
+    //     decimal jornalTotal = jornalBase * cantidadPedidos;
 
-        return jornalTotal;
-    }
+    //     return jornalTotal;
+    // }
 
     // public Cadete(int id, string nombre, string direccion, string telefono)
     // {
@@ -48,16 +49,16 @@ class Cadete
     // }
 
     // modificar
-    // public decimal JornalACobrar()
-    // {
-    //     decimal jornalBase = 500; 
-    //     int cantidadPedidos = ListadoPedidos.Count; //cant pedidos asignados
+    public decimal JornalACobrar()
+    {
+        decimal jornalBase = 500; 
+        int cantidadPedidos = ListadoPedidos.Count; //quitar listado
 
-    //     // Calcula el jornal 
-    //     decimal jornalTotal = jornalBase * cantidadPedidos;
+        // Calcula el jornal 
+        decimal jornalTotal = jornalBase * cantidadPedidos;
 
-    //     return jornalTotal;
-    // }
+        return jornalTotal;
+    }
 
     // sacar
     // public void AgregarPedido(Pedido pedido)
@@ -89,9 +90,3 @@ class Cadete
 
 
 }
-
-E:\tl2-tp1-2023-facu20233\ejercicio2\cadete.cs(33,31): error CS0103: El nombre 'ListadoPedidos' no e
-xiste en el contexto actual [E:\tl2-tp1-2023-facu20233\ejercicio2\ejercicio2.csproj]
-
-
-
