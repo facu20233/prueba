@@ -96,3 +96,83 @@ int main() {
 
     return 0;
 }
+
+
+----
+
+#include <iostream>
+#include <string>
+
+// dato -> dato ->
+class Nodo{
+public:
+    int valor;
+    Nodo *siguiente;
+
+    Nodo (int val): valor(val), siguiente(nullptr){}
+public:
+    
+};
+
+
+// -> 1 2 3 4
+class Fila{
+private:
+    Nodo *frente;
+    Nodo *final;
+
+public:
+
+    Fila(): frente(nullptr), final(nullptr){}
+    
+    ~Fila(){
+        // 
+    }
+
+    // crear fila vacia
+    Fila FilaVacia(){ 
+        // 
+    }
+
+    bool esFilaVacia(){ 
+        // 
+    }
+
+    void Desfila(){
+        //   
+    }
+
+    void Enfila(int valor){
+        // 
+    }
+
+
+    int Frente(){
+        // 
+    }
+
+    // longitud de la fila
+    int longitud(Fila){
+
+    }
+
+    // paso una fila y un elemento
+    bool Pertenece(Fila ,int valor){
+
+    }
+
+    
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
