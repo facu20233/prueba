@@ -1,22 +1,23 @@
+// pedidos.cs
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+namespace EspacioCadeteria;
 
-namespace EspacioCadeteria
-{
-    class Pedido
+ class Pedido
     {
         private int numero;
         private string observacion;
         private Cliente cliente;
         private string estado;
-        private Cadete cadete; // Agregamos una referencia a Cadete
+        private Cadete cadete; // referencia a Cadete ii
 
         public int Numero { get => numero; set => numero = value; }
         public string Observacion { get => observacion; set => observacion = value; }
         internal Cliente Cliente { get => cliente; set => cliente = value; }
         public string Estado { get => estado; set => estado = value; }
-        public Cadete Cadete { get => cadete; set => cadete = value; } // Propiedad para la referencia a Cadete
+        public Cadete Cadete { get => cadete; set => cadete = value; } //referencia a Cadete ii
 
         public Pedido(int numero, string observacion, Cliente cliente, string estado)
         {
@@ -41,5 +42,40 @@ namespace EspacioCadeteria
         {
             return Estado;
         }
+    }
+
+// cadeteria.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace EspacioCadeteria;
+
+
+class Cadeteria
+{
+    private string nombre;
+    private string telefono;
+
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Telefono { get => telefono; set => telefono = value; }
+
+    private List<Cadete> listadoCadetes = new List<Cadete>();
+    public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
+
+    public Cadeteria(string nombre, string telefono)
+    {
+        this.Nombre = nombre;
+        this.Telefono = telefono;
+    }
+
+    public void AgregarCadete(Cadete cadete)
+    {
+        ListadoCadetes.Add(cadete);
+    }
+
+    public void EliminarCadete(Cadete cadete)
+    {
+        ListadoCadetes.Remove(cadete);
     }
 }
