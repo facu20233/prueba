@@ -259,3 +259,5 @@ class Cadeteria
     
 }
 
+E:\tl2-tp1-2023-facu20233\ejercicio2\cadete.cs(54,31): error CS0103: El nombre 'ListadoPedidos' no e
+xiste en el contexto actual [E:\tl2-tp1-2023-facu20233\ejercicio2\ejercicio2.csproj]
