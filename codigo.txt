@@ -1,94 +1,50 @@
 // cadete.cs
 using System;
-
-namespace EspacioCadeteria
-{
-    public class Cadete
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Direccion { get; set; }
-        public string Telefono { get; set; }
-
-        public Cadete(int id, string nombre, string direccion, string telefono)
-        {
-            Id = id;
-            Nombre = nombre;
-            Direccion = direccion;
-            Telefono = telefono;
-        }
-
-        // Métodos y propiedades específicas de Cadete
-    }
-}
-
-// pedido.cs
-using System;
-
-namespace EspacioCadeteria
-{
-    public class Pedido
-    {
-        public int Numero { get; set; }
-        public string Observacion { get; set; }
-        public Cliente Cliente { get; set; }
-        public string Estado { get; set; }
-        public Cadete CadeteAsignado { get; set; } // Referencia al cadete asignado
-
-        public Pedido(int numero, string observacion, Cliente cliente, string estado)
-        {
-            Numero = numero;
-            Observacion = observacion;
-            Cliente = cliente;
-            Estado = estado;
-        }
-
-        // Métodos y propiedades específicas de Pedido
-    }
-}
-
-// cadeteria.cs
-using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace EspacioCadeteria;
 
-namespace EspacioCadeteria
+class Cadete
 {
-    public class Cadeteria
+    private int id;
+    private string nombre;
+    private string direccion;
+    private string telefono;
+    private List<Pedido> listadoPedidos = new List<Pedido>();
+    public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
+
+    public int Id { get => id; set => id = value; }
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Direccion { get => direccion; set => direccion = value; }
+    public string Telefono { get => telefono; set => telefono = value; }
+    
+
+    public Cadete(int id, string nombre, string direccion, string telefono)
     {
-        public string Nombre { get; set; }
-        public string Telefono { get; set; }
-        public List<Cadete> ListadoCadetes { get; set; }
-        public List<Pedido> ListadoPedidos { get; set; } // Lista de todos los pedidos
+        this.Id = id;
+        this.Nombre = nombre;
+        this.Direccion = direccion;
+        this.Telefono = telefono;
+    }
 
-        public Cadeteria(string nombre, string telefono)
-        {
-            Nombre = nombre;
-            Telefono = telefono;
-            ListadoCadetes = new List<Cadete>();
-            ListadoPedidos = new List<Pedido>();
-        }
+    public decimal JornalACobrar()
+    {
+        return ListadoPedidos.Count * 500;
+    }
 
-        // Métodos y propiedades específicas de Cadeteria
+    public void AgregarPedido(Pedido pedido)
+    {
+        ListadoPedidos.Add(pedido);
+    }
 
-        public decimal JornalACobrar(int cadeteId)
-        {
-            // Buscar ID
-            Cadete cadete = ListadoCadetes.FirstOrDefault(c => c.Id == cadeteId);
+    public void EliminarPedido(Pedido pedido)
+    {
+        ListadoPedidos.Remove(pedido);
+    }
 
-            if (cadete != null)
-            {
-                // Calcular jornal basado en la cantidad de pedidos del cadete
-                decimal jornalBase = 500;
-                int cantidadPedidos = ListadoPedidos.Count(p => p.CadeteAsignado != null && p.CadeteAsignado.Id == cadeteId);
-                decimal jornalCadete = jornalBase * cantidadPedidos;
-                return jornalCadete;
-            }
-            else
-            {
-                throw new InvalidOperationException("Cadete no encontrado.");
-            }
-        }
-
-        // Otros métodos para operaciones de la Cadeteria
+    public string Estado()
+    {
+        return ListadoPedidos.Any() ? "Activo" : "Inactivo";
     }
 }
