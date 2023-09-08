@@ -1,81 +1,60 @@
-// pedidos.cs
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-namespace EspacioCadeteria;
 
- class Pedido
-    {
-        private int numero;
-        private string observacion;
-        private Cliente cliente;
-        private string estado;
-        private Cadete cadete; // referencia a Cadete ii
-
-        public int Numero { get => numero; set => numero = value; }
-        public string Observacion { get => observacion; set => observacion = value; }
-        internal Cliente Cliente { get => cliente; set => cliente = value; }
-        public string Estado { get => estado; set => estado = value; }
-        public Cadete Cadete { get => cadete; set => cadete = value; } //referencia a Cadete ii
-
-        public Pedido(int numero, string observacion, Cliente cliente, string estado)
-        {
-            this.Numero = numero;
-            this.Observacion = observacion;
-            this.Cliente = cliente;
-            this.Estado = estado;
-        }
-
-        public void VerDireccionCliente()
-        {
-            Console.WriteLine($"Dirección del Cliente: {Cliente.Direccion}");
-        }
-
-        public void VerDatosCliente()
-        {
-            Console.WriteLine($"Nombre del Cliente: {Cliente.Nombre}");
-            Console.WriteLine($"Teléfono del Cliente: {Cliente.Telefono}");
-        }
-
-        public string ObtenerEstado()
-        {
-            return Estado;
-        }
-    }
-
-// cadeteria.cs
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-namespace EspacioCadeteria;
-
-
-class Cadeteria
+namespace EspacioCadeteria
 {
-    private string nombre;
-    private string telefono;
-
-    public string Nombre { get => nombre; set => nombre = value; }
-    public string Telefono { get => telefono; set => telefono = value; }
-
-    private List<Cadete> listadoCadetes = new List<Cadete>();
-    public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
-
-    public Cadeteria(string nombre, string telefono)
+    class Cadeteria
     {
-        this.Nombre = nombre;
-        this.Telefono = telefono;
-    }
+        private string nombre;
+        private string telefono;
+        private List<Cadete> listadoCadetes = new List<Cadete>();
+        private List<Pedido> listadoPedidos = new List<Pedido>(); // Agregar la lista de pedidos
 
-    public void AgregarCadete(Cadete cadete)
-    {
-        ListadoCadetes.Add(cadete);
-    }
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Telefono { get => telefono; set => telefono = value; }
+        public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
+        public List<Pedido> ListadoPedidos { get => listadoPedidos; } // Propiedad solo de lectura para la lista de pedidos
 
-    public void EliminarCadete(Cadete cadete)
-    {
-        ListadoCadetes.Remove(cadete);
+        public Cadeteria(string nombre, string telefono)
+        {
+            this.Nombre = nombre;
+            this.Telefono = telefono;
+        }
+
+        public void AgregarCadete(Cadete cadete)
+        {
+            ListadoCadetes.Add(cadete);
+        }
+
+        public void EliminarCadete(Cadete cadete)
+        {
+            ListadoCadetes.Remove(cadete);
+        }
+
+        // Método para calcular el jornal a cobrar por un cadete específico
+        public decimal JornalACobrar(int idCadete)
+        {
+            Cadete cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+            if (cadete != null)
+            {
+                return cadete.JornalACobrar();
+            }
+            return 0; // Si no se encuentra el cadete, el jornal es 0
+        }
+
+        // Método para asignar un cadete a un pedido específico
+        public void AsignarCadeteAPedido(int idCadete, int idPedido)
+        {
+            Cadete cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+            Pedido pedido = ListadoPedidos.FirstOrDefault(p => p.Numero == idPedido);
+
+            if (cadete != null && pedido != null)
+            {
+                pedido.Cadete = cadete;
+                cadete.AgregarPedido(pedido);
+            }
+        }
     }
 }
