@@ -167,6 +167,142 @@ public:
 
 
 
+3-----------
+
+
+
+
+#include <iostream>
+
+class Nodo {
+public:
+    int valor;
+    Nodo* siguiente;
+
+    Nodo(int val) : valor(val), siguiente(nullptr) {}
+};
+
+class Fila {
+private:
+    Nodo* frente;
+    Nodo* final;
+
+public:
+    // Constructor por defecto que crea una fila vacía.
+    Fila() : frente(nullptr), final(nullptr) {}
+
+    // Destructor que libera la memoria asignada dinámicamente en la fila.
+    ~Fila() {
+        while (!esFilaVacia()) {
+            Desfila();
+        }
+    }
+
+    // Método para verificar si la fila está vacía.
+    bool esFilaVacia() {
+        return frente == nullptr;
+    }
+
+    // Método para eliminar el elemento frontal de la fila.
+    void Desfila() {
+        if (!esFilaVacia()) {
+            Nodo* temp = frente;
+            frente = frente->siguiente;
+            delete temp;
+        }
+    }
+
+    // Método para agregar un elemento al final de la fila.
+    void Enfila(int valor) {
+        Nodo* nuevoNodo = new Nodo(valor);
+        if (esFilaVacia()) {
+            frente = final = nuevoNodo;
+        } else {
+            final->siguiente = nuevoNodo;
+            final = nuevoNodo;
+        }
+    }
+
+    // Método para obtener el elemento frontal de la fila.
+    int Frente() {
+        if (!esFilaVacia()) {
+            return frente->valor;
+        }
+        // Aquí puedes manejar un caso de error o lanzar una excepción.
+        throw std::runtime_error("La fila está vacía.");
+    }
+
+    // Método para mostrar los elementos que contiene la fila.
+    void Mostrar() {
+        Nodo* actual = frente;
+        while (actual != nullptr) {
+            std::cout << actual->valor << " ";
+            actual = actual->siguiente;
+        }
+        std::cout << std::endl;
+    }
+
+    // Método para obtener la longitud de la fila.
+    int Longitud() {
+        Nodo* actual = frente;
+        int length = 0;
+        while (actual != nullptr) {
+            length++;
+            actual = actual->siguiente;
+        }
+        return length;
+    }
+
+    // Método para contar la cantidad de elementos iguales a X en la fila.
+    int ContarX(int X) {
+        Nodo* actual = frente;
+        int count = 0;
+        while (actual != nullptr) {
+            if (actual->valor == X) {
+                count++;
+            }
+            actual = actual->siguiente;
+        }
+        return count;
+    }
+
+    // Método para verificar si un valor pertenece a la fila.
+    bool Pertenece(int valor) {
+        Nodo* actual = frente;
+        while (actual != nullptr) {
+            if (actual->valor == valor) {
+                return true;
+            }
+            actual = actual->siguiente;
+        }
+        return false;
+    }
+};
+
+int main() {
+    Fila fila;
+    fila.Enfila(1);
+    fila.Enfila(2);
+    fila.Enfila(3);
+    fila.Enfila(2);
+
+    std::cout << "Elementos de la fila: ";
+    fila.Mostrar();
+
+    int valor = 2;
+    int cantidad = fila.ContarX(valor);
+    std::cout << "Cantidad de elementos iguales a " << valor << ": " << cantidad << std::endl;
+
+    valor = 4;
+    bool pertenece = fila.Pertenece(valor);
+    std::cout << "¿El valor " << valor << " pertenece a la fila? " << (pertenece ? "Sí" : "No") << std::endl;
+
+    return 0;
+}
+
+
+
+
 
 
 
