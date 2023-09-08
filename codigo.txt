@@ -78,3 +78,126 @@ int main() {
     fila.Mostrar();
 
 }
+
+-----------
+
+#include <iostream>
+
+class Nodo {
+private:
+    int valor;
+    Nodo* siguiente;
+
+    friend class Fila; // Permite que la clase Fila acceda a los atributos privados de Nodo.
+
+public:
+    Nodo(int val) : valor(val), siguiente(nullptr) {}
+};
+
+class Fila {
+private:
+    Nodo* frente;
+    Nodo* final;
+
+public:
+    Fila() : frente(nullptr), final(nullptr) {}
+
+    ~Fila() {
+        while (!esFilaVacia()) {
+            Desfila();
+        }
+    }
+
+    bool esFilaVacia() {
+        return frente == nullptr;
+    }
+
+    void Desfila() {
+        if (!esFilaVacia()) {
+            Nodo* temp = frente;
+            frente = frente->siguiente;
+            delete temp;
+        }
+    }
+
+    void Enfila(int valor) {
+        Nodo* nuevoNodo = new Nodo(valor);
+        if (esFilaVacia()) {
+            frente = final = nuevoNodo;
+        } else {
+            final->siguiente = nuevoNodo;
+            final = nuevoNodo;
+        }
+    }
+
+    int Frente() {
+        if (!esFilaVacia()) {
+            return frente->valor;
+        }
+        throw std::runtime_error("La fila está vacía.");
+    }
+
+    void Mostrar() {
+        Nodo* actual = frente;
+        while (actual != nullptr) {
+            std::cout << actual->valor << " ";
+            actual = actual->siguiente;
+        }
+        std::cout << std::endl;
+    }
+
+    int Longitud() {
+        Nodo* actual = frente;
+        int length = 0;
+        while (actual != nullptr) {
+            length++;
+            actual = actual->siguiente;
+        }
+        return length;
+    }
+
+    int ContarX(int X) {
+        Nodo* actual = frente;
+        int count = 0;
+        while (actual != nullptr) {
+            if (actual->valor == X) {
+                count++;
+            }
+            actual = actual->siguiente;
+        }
+        return count;
+    }
+
+    bool Pertenece(int valor) {
+        Nodo* actual = frente;
+        while (actual != nullptr) {
+            if (actual->valor == valor) {
+                return true;
+            }
+            actual = actual->siguiente;
+        }
+        return false;
+    }
+};
+
+int main() {
+    Fila fila;
+    fila.Enfila(1);
+    fila.Enfila(2);
+    fila.Enfila(3);
+    fila.Enfila(2);
+
+    std::cout << "Elementos de la fila: ";
+    fila.Mostrar();
+
+    int valor = 2;
+    int cantidad = fila.ContarX(valor);
+    std::cout << "Cantidad de elementos iguales a " << valor << ": " << cantidad << std::endl;
+
+    valor = 4;
+    bool pertenece = fila.Pertenece(valor);
+    std::cout << "¿El valor " << valor << " pertenece a la fila? " << (pertenece ? "Sí" : "No") << std::endl;
+
+    return 0;
+}
+
