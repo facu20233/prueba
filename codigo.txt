@@ -15,76 +15,79 @@ public:
     ~Producto(); // Destructor
 
     void listarInformacion();
-    float calcularPrecioVenta(); // Método para calcular el precio de venta
+    float calcularPrecioVenta(); 
 };
 
 Producto::Producto()
 {
-    // Implementa la inicialización de miembros aquí
+    // 
 }
 
 Producto::~Producto()
 {
-    // Implementa la liberación de recursos aquí si es necesario
+    // 
 }
 
 void Producto::listarInformacion()
 {
-    // Implementa la función aquí
+    // 
 }
 
 float Producto::calcularPrecioVenta()
 {
-    // Implementa el cálculo del precio de venta aquí
+    // 
 }
+
+// ----------------
 
 class Vector
 {
 private:
     int max; // Entero >= 0
-    vector<Producto> productos; // Colección de objetos Producto
+    vector<Producto> productos; // vector objetos Producto
 
 public:
-    Vector(); // Constructor
-    ~Vector(); // Destructor
+    Vector(); // Const
+    ~Vector(); // Dest
 
     bool reservaMemoria();
     int getCapacidad();
-    Producto operator[](int index); // Sobrecarga del operador []
+    Producto operator[](int index); // Sobrecarga operador []
 
-    // Otras funciones que puedas necesitar
+    // funciones
 };
 
 Vector::Vector()
 {
-    max = 0; // Inicializa max como 0 o cualquier otro valor predeterminado
+    max = 0; // Inic
 }
 
 Vector::~Vector()
 {
-    // Implementa la liberación de recursos aquí si es necesario
+    // Implem
 }
 
 bool Vector::reservaMemoria()
 {
-    // Implementa la función aquí
-    return false; // Reemplaza esto con la lógica adecuada
+    // Impl
+    return false; // corregir
 }
 
 int Vector::getCapacidad()
 {
-    // Implementa la función aquí
-    return 0; // Reemplaza esto con la lógica adecuada
+    // Implem
+    return 0; //corregir
 }
 
 Producto Vector::operator[](int index)
 {
-    // Implementa la sobrecarga del operador [] aquí
-    return Producto(); // Reemplaza esto con la lógica adecuada
+    // Implem
+    return Producto(); // corregir
 }
+
+// ------------
 
 int main()
 {
-    // Aquí puedes escribir un programa de prueba para verificar tus implementaciones
     return 0;
 }
