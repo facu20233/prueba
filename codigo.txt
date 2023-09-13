@@ -1,124 +1,56 @@
 #include <iostream>
+#include <string>
 #include <vector>
-using namespace std;
 
-class Producto
-{
-private:
-    int codigo;
-    string descripcion;
-    float precioBase;
-    const float IVA = 0.21; // Constante IVA = 0.21
-
+class Curso {
 public:
-    Producto(); // Constructor
-    ~Producto(); // Destructor
+    Curso(const std::string& nombre) : nombre(nombre) {}
 
-    void listarInformacion();
-    float calcularPrecioVenta();
+    std::string getNombre() const {
+        return nombre;
+    }
+
+private:
+    std::string nombre;
 };
 
-Producto::Producto()
-{
-    // Inicializa los miembros de la clase Producto aquí
-    codigo = 0;
-    descripcion = "";
-    precioBase = 0.0;
-}
-
-Producto::~Producto()
-{
-    // Implementa la liberación de recursos aquí si es necesario
-}
-
-void Producto::listarInformacion()
-{
-    // Implementa la función aquí para mostrar información del producto
-    cout << "Código: " << codigo << endl;
-    cout << "Descripción: " << descripcion << endl;
-    cout << "Precio Base: " << precioBase << endl;
-}
-
-float Producto::calcularPrecioVenta()
-{
-    // Implementa el cálculo del precio de venta aquí
-    float precioVenta = precioBase * (1 + IVA);
-    return precioVenta;
-}
-
-class Vector
-{
-private:
-    int max; // Entero >= 0
-    vector<Producto> productos; // vector de objetos Producto
-
+class Departamento {
 public:
-    Vector(); // Constructor
-    ~Vector(); // Destructor
+    Departamento(const std::string& nombre) : nombre(nombre) {}
 
-    bool reservaMemoria();
-    int getCapacidad();
-    Producto operator[](int index); // Sobrecarga operador []
+    void agregarCurso(Curso* curso) {
+        cursos.push_back(curso);
+    }
+
+    void mostrarCursos() const {
+        std::cout << "Cursos en el departamento de " << nombre << ":\n";
+        for (const Curso* curso : cursos) {
+            std::cout << curso->getNombre() << "\n";
+        }
+    }
+
+private:
+    std::string nombre;
+    std::vector<Curso*> cursos;
 };
 
-Vector::Vector()
-{
-    max = 0; // Inicializa max como 0 o cualquier otro valor predeterminado
-}
+int main() {
+    Curso* curso1 = new Curso("Matemáticas");
+    Curso* curso2 = new Curso("Física");
+    Curso* curso3 = new Curso("Programación");
 
-Vector::~Vector()
-{
-    // Implementa la liberación de recursos aquí si es necesario
-}
+    Departamento departamento("Ciencias");
 
-bool Vector::reservaMemoria()
-{
-    // Implementa la función aquí
-    return false; // Reemplaza esto con la lógica adecuada
-}
+    departamento.agregarCurso(curso1);
+    departamento.agregarCurso(curso2);
+    departamento.agregarCurso(curso3);
 
-int Vector::getCapacidad()
-{
-    // Implementa la función aquí
-    return productos.size(); // Devuelve el tamaño del vector de productos
-}
+    departamento.mostrarCursos();
 
-Producto Vector::operator[](int index)
-{
-    // Implementa la sobrecarga del operador [] aquí
-    if (index >= 0 && index < productos.size()) {
-        return productos[index];
-    } else {
-        // Manejar el caso en que el índice está fuera de rango
-        // Puedes lanzar una excepción o manejarlo de otra manera adecuada
-        throw out_of_range("Índice fuera de rango");
-    }
-}
-
-int main()
-{
-    // Crear un objeto de la clase Vector
-    Vector miVector;
-
-    // Agregar productos al vector
-    Producto producto1;
-    producto1.listarInformacion(); // Debes llenar la información antes de mostrarla
-    miVector.productos.push_back(producto1);
-
-    Producto producto2;
-    producto2.listarInformacion(); // Debes llenar la información antes de mostrarla
-    miVector.productos.push_back(producto2);
-
-    // Mostrar la capacidad del vector
-    cout << "Capacidad del vector: " << miVector.getCapacidad() << endl;
-
-    // Acceder a un producto usando la sobrecarga del operador []
-    try {
-        Producto producto = miVector[0];
-        producto.listarInformacion();
-    } catch (const out_of_range& e) {
-        cerr << "Error: " << e.what() << endl;
-    }
+    // Liberar la memoria de los cursos
+    delete curso1;
+    delete curso2;
+    delete curso3;
 
     return 0;
 }
