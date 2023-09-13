@@ -1,69 +1,90 @@
-a Entre la clase vector y producto existe una asociacion de agregacion .
-
-b. Implemente los diagramas en C++, teniendo en cuenta el análisis realizado previamente.
-
-c. Escriba un programa de prueba para verificar que su implementación funciona
-correctamente.
-
-// vector.h
 #include <iostream>
-#include "Producto.h"
-using namespace std;
-
-class vector
-{
-private:
-    int max; // entero>= 0
-public:
-    // def
-    vector();
-
-    // destructor
-    ~vector();
-
-    bool reservaMemoria(){
-        // 
-    }
-
-    int getCapacidad(){
-        // 
-    }
-
-    Producto operador(){
-        // 
-    }
-
-};
-
-
-// Producto.h
-#include <iostream>
+#include <vector>
 using namespace std;
 
 class Producto
 {
 private:
     int codigo;
-    std::string descripcion;
+    string descripcion;
     float precioBase;
-    const float IVA = 0.21; //constante IVA = 0.21
+    const float IVA = 0.21; // Constante IVA = 0.21
 
 public:
-    // def
-    Producto();
+    Producto(); // Constructor
+    ~Producto(); // Destructor
 
-    // des
-    ~Producto();
-
-    void listarInformacion(){
-        // 
-    }
-
-    float calcularPrecioVenta(){ //real>=0
-        // 
-    }
+    void listarInformacion();
+    float calcularPrecioVenta(); // Método para calcular el precio de venta
 };
 
+Producto::Producto()
+{
+    // Implementa la inicialización de miembros aquí
+}
 
+Producto::~Producto()
+{
+    // Implementa la liberación de recursos aquí si es necesario
+}
 
+void Producto::listarInformacion()
+{
+    // Implementa la función aquí
+}
 
+float Producto::calcularPrecioVenta()
+{
+    // Implementa el cálculo del precio de venta aquí
+}
+
+class Vector
+{
+private:
+    int max; // Entero >= 0
+    vector<Producto> productos; // Colección de objetos Producto
+
+public:
+    Vector(); // Constructor
+    ~Vector(); // Destructor
+
+    bool reservaMemoria();
+    int getCapacidad();
+    Producto operator[](int index); // Sobrecarga del operador []
+
+    // Otras funciones que puedas necesitar
+};
+
+Vector::Vector()
+{
+    max = 0; // Inicializa max como 0 o cualquier otro valor predeterminado
+}
+
+Vector::~Vector()
+{
+    // Implementa la liberación de recursos aquí si es necesario
+}
+
+bool Vector::reservaMemoria()
+{
+    // Implementa la función aquí
+    return false; // Reemplaza esto con la lógica adecuada
+}
+
+int Vector::getCapacidad()
+{
+    // Implementa la función aquí
+    return 0; // Reemplaza esto con la lógica adecuada
+}
+
+Producto Vector::operator[](int index)
+{
+    // Implementa la sobrecarga del operador [] aquí
+    return Producto(); // Reemplaza esto con la lógica adecuada
+}
+
+int main()
+{
+    // Aquí puedes escribir un programa de prueba para verificar tus implementaciones
+    return 0;
+}
