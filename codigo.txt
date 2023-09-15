@@ -1,37 +1,42 @@
+error: no default constructor exists for class "Persona"C/C++(291)
+
 // pelicula.h
 #include <iostream>
 #include <string>
-#include "persona.h" // Incluir la cabecera de Persona
+#include "persona.h"
 
-class Pelicula {
+class pelicula {
 private:
+    // atrib
     static int autonumerico;
     int codigo;
     std::string titulo;
-    Persona director; // Cambiar el tipo de director a Persona
+    // std::string director; //objeto persona
+    Persona director; //objeto persona
     bool estreno;
     float precioBase;
     std::string tipoPelicula;
 
 public:
     // Constructor defecto
-    Pelicula() {
-        codigo = autonumerico++;
+    //clase pelicula
+    pelicula(){
+        codigo = autonumerico++; //código 000
         titulo = "Sin título";
-        director = Persona("Sin director", "Sin biografía", 0); // Crear una Persona por defecto
+        director = Persona("director:", "biografia", 0);
         estreno = false;
         precioBase = 0.0;
         tipoPelicula = "N";
     }
 
     // Constructor parámetros
-    Pelicula(int codigo, std::string titulo, Persona director, bool estreno, float precioBase, std::string tipoPelicula)
+    pelicula(int codigo, std::string titulo, Persona director, bool estreno, float precioBase, std::string tipoPelicula)
         : codigo(codigo), titulo(titulo), director(director), estreno(estreno), precioBase(precioBase), tipoPelicula(tipoPelicula) {
         autonumerico++;
     }
 
     // Constructor copia
-    Pelicula(const Pelicula& otraPelicula) {
+    pelicula(const pelicula& otraPelicula) {
         codigo = autonumerico++;
         titulo = otraPelicula.titulo;
         director = otraPelicula.director;
@@ -40,10 +45,28 @@ public:
         tipoPelicula = otraPelicula.tipoPelicula;
     }
 
-    // Método para obtener la biografía del director incluyendo su edad
+    // // metodo
+    // void listarInformacion() {
+    //     std::cout << "Código: " << codigo << std::endl;
+    //     std::cout << "Título: " << titulo << std::endl;
+    //     std::cout << "Director: " << director << std::endl;
+    //     std::cout << "Estreno: " << (estreno ? "Sí" : "No") << std::endl;
+    //     std::cout << "Precio Base: " << precioBase << std::endl;
+    //     std::cout << "Tipo Película: " << tipoPelicula << std::endl;
+    // }
+
+    // metodo
+    float calcularCosto() {
+        float costo = precioBase;
+        if (tipoPelicula == "I") {
+            costo *= 1.30;
+        } else if (!estreno) {
+            costo *= 0.8;
+        }
+        return costo;
+    }
+
     std::string getBiografiaDirector() {
         return director.GetNombre() + ": " + director.GetBiografia() + " (Edad: " + std::to_string(director.GetEdad()) + ")";
     }
-
-    // Resto de métodos (listarInformacion, calcularCosto) no cambian
 };
