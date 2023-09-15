@@ -108,3 +108,26 @@ public:
         return director.GetNombre() + ": " + director.GetBiografia() + " (Edad: " + std::to_string(director.GetEdad()) + ")";
     }
 };
+
+
+-------++---
+
+#include <iostream>
+#include "pelicula.h"
+
+int main() {
+    // Crear instancias de Persona para los directores
+    Persona director1("Director 1", "Biografía del Director 1", 40);
+    Persona director2("Director 2", "Biografía del Director 2", 50);
+
+    // Crear instancias de Pelicula con los directores
+    pelicula pelicula1(1, "Pelicula 1", director1, true, 20.0, "I");
+    pelicula pelicula2(2, "Pelicula 2", director2, false, 15.0, "N");
+
+    // Obtener y mostrar la biografía de los directores
+    std::cout << "Biografía del Director de la Pelicula 1: " << pelicula1.getBiografiaDirector() << std::endl;
+    std::cout << "Biografía del Director de la Pelicula 2: " << pelicula2.getBiografiaDirector() << std::endl;
+
+    return 0;
+}
+
