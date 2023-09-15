@@ -1,40 +1,27 @@
-// persona.h
+undefined reference to `pelicula::autonumerico'
+collect2.exe: error: ld returned 1 exit status
+
+// programa.cpp
 #include <iostream>
 #include <string>
+#include "persona.h"
+#include "pelicula.h"
 
-class Persona {
-private:
-    std::string nombre;
-    std::string biografia;
-    int edad;
+int main() {
+    // instanc Persona directores
+    Persona director1("Director 1", "Biografía del Director 1", 40);
+    Persona director2("Director 2", "Biografía del Director 2", 50);
 
-public:
-    Persona(){
-        nombre = "agregar";
-        biografia = "agregar";
-        edad = 0;
-    }
+    // instanc Pelicula con directores
+    pelicula pelicula1(1, "Pelicula 1", director1, true, 20.0, "I");
+    pelicula pelicula2(2, "Pelicula 2", director2, false, 15.0, "N");
 
-    // Constructor inic datos
-    Persona(const std::string& nombre, const std::string& biografia, int edad) 
-        : nombre(nombre), biografia(biografia), edad(edad) {}
+    // mostrar
+    std::cout << "Biografía del Director de la Pelicula 1: " << pelicula1.getBiografiaDirector() << std::endl;
+    std::cout << "Biografía del Director de la Pelicula 2: " << pelicula2.getBiografiaDirector() << std::endl;
 
-    // obt nom
-    std::string GetNombre() const {
-        return nombre;
-    }
-
-    // obt bio
-    std::string GetBiografia() const {
-        return biografia;
-    }
-
-    // obt edad
-    int GetEdad() const {
-        return edad;
-    }
-
-};
+    return 0;
+}
 
 // pelicula.h
 #include <iostream>
@@ -108,26 +95,3 @@ public:
         return director.GetNombre() + ": " + director.GetBiografia() + " (Edad: " + std::to_string(director.GetEdad()) + ")";
     }
 };
-
-
--------++---
-
-#include <iostream>
-#include "pelicula.h"
-
-int main() {
-    // Crear instancias de Persona para los directores
-    Persona director1("Director 1", "Biografía del Director 1", 40);
-    Persona director2("Director 2", "Biografía del Director 2", 50);
-
-    // Crear instancias de Pelicula con los directores
-    pelicula pelicula1(1, "Pelicula 1", director1, true, 20.0, "I");
-    pelicula pelicula2(2, "Pelicula 2", director2, false, 15.0, "N");
-
-    // Obtener y mostrar la biografía de los directores
-    std::cout << "Biografía del Director de la Pelicula 1: " << pelicula1.getBiografiaDirector() << std::endl;
-    std::cout << "Biografía del Director de la Pelicula 2: " << pelicula2.getBiografiaDirector() << std::endl;
-
-    return 0;
-}
-
