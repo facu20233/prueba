@@ -1,4 +1,40 @@
-error: no default constructor exists for class "Persona"C/C++(291)
+// persona.h
+#include <iostream>
+#include <string>
+
+class Persona {
+private:
+    std::string nombre;
+    std::string biografia;
+    int edad;
+
+public:
+    Persona(){
+        nombre = "agregar";
+        biografia = "agregar";
+        edad = 0;
+    }
+
+    // Constructor inic datos
+    Persona(const std::string& nombre, const std::string& biografia, int edad) 
+        : nombre(nombre), biografia(biografia), edad(edad) {}
+
+    // obt nom
+    std::string GetNombre() const {
+        return nombre;
+    }
+
+    // obt bio
+    std::string GetBiografia() const {
+        return biografia;
+    }
+
+    // obt edad
+    int GetEdad() const {
+        return edad;
+    }
+
+};
 
 // pelicula.h
 #include <iostream>
@@ -18,12 +54,14 @@ private:
     std::string tipoPelicula;
 
 public:
+
     // Constructor defecto
     //clase pelicula
+    // clase persona por defecto
     pelicula(){
         codigo = autonumerico++; //código 000
         titulo = "Sin título";
-        director = Persona("director:", "biografia", 0);
+        director = Persona("director", "biografia", 0);
         estreno = false;
         precioBase = 0.0;
         tipoPelicula = "N";
