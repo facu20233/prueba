@@ -95,3 +95,12 @@ public:
         return director.GetNombre() + ": " + director.GetBiografia() + " (Edad: " + std::to_string(director.GetEdad()) + ")";
     }
 };
+
+--------
+
+// pelicula.cpp
+#include "pelicula.h"
+
+// Inicializa la variable estática autonumerico
+int pelicula::autonumerico = 1;
+
