@@ -84,6 +84,8 @@ public:
     }
 };
 
+//puntero
+//no usar #include vector
 class venta {
 private:
     int codigoVenta;
