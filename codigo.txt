@@ -250,3 +250,31 @@ b. Escriba un programa de prueba para verificar que su implementación funciona
 correctamente. 
 
 
+int main() {
+    // Crear algunas publicaciones
+    publicacion* libro1 = new libro("El Libro de la Selva", 2000, 15.0, 123456789, "Rudyard Kipling", true);
+    publicacion* revista1 = new revista("National Geographic", 2021, 10.0, 987654321, 5, 100, "Ciencia");
+
+    // Crear una venta
+    venta* venta1 = new venta(1, "2023-09-27");
+    venta1->agregarArticulo(libro1);
+    venta1->agregarArticulo(revista1);
+
+    // Registrar la venta en el sistema
+    sistema libreria;
+    libreria.registrarVenta(venta1);
+
+    // Listar ventas en una fecha específica
+    libreria.listarVentasEnFecha("2023-09-27");
+
+    // Calcular el monto total en un mes específico
+    float montoTotalMes = libreria.calcularMontoTotalEnMes(9);
+    cout << "Monto total en el mes de septiembre: " << montoTotalMes << endl;
+
+    // Liberar memoria
+    delete libro1;
+    delete revista1;
+
+    return 0;
+}
+
