@@ -246,6 +246,7 @@ public:
 
 };
 
-
+b. Escriba un programa de prueba para verificar que su implementación funciona
+correctamente. 
 
 
