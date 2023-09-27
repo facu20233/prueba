@@ -1,265 +1,217 @@
+// publicacion.h
 #include <iostream>
-#include <vector>
-#include <string>
-
 using namespace std;
 
-class publicacion {
+class publicacion
+{
+    
 private:
     string titulo;
     int anioEdicion;
-    float precioBase;
+    float PrecioBase; 
 
 public:
-    publicacion(const string& _titulo, int _anioEdicion, float _precioBase)
-        : titulo(_titulo), anioEdicion(_anioEdicion), precioBase(_precioBase) {}
+    publicacion(const string& _titulo, int _anioEdicion, float _precioBase): 
+    titulo(_titulo), 
+    anioEdicion(_anioEdicion), 
+    PrecioBase(_precioBase) {}
 
-    virtual ~publicacion() {}
+    virtual ~publicacion();
 
     virtual void listarInformacion() const {
         cout << "Título: " << titulo << endl;
         cout << "Año de Edición: " << anioEdicion << endl;
-        cout << "Precio Base: " << precioBase << endl;
+        cout << "Precio Base: " << PrecioBase << endl;
+    }
+    virtual float calcularPrecio(){
+        return PrecioBase; //corregir
     }
 
-    virtual float calcularPrecio() const {
-        return precioBase;
+    // get
+    float getPrecioBase(){
+        return PrecioBase;
     }
 
-    float getPrecioBase() const {
-        return precioBase;
-    }
-
-    int getAnioEdicion() const {
+    int getAnioEdicion(){
         return anioEdicion;
     }
+    
+
 };
 
-class libro : public publicacion {
+// libro.h
+#include <iostream>
+#include "publicacion.h"
+using namespace std;
+
+class libro : public publicacion
+{
 private:
-    int ISBN;
+    int ISBN; //? 
     string autorPrincipal;
     bool bestSeller;
-
+    
 public:
-    libro(const string& _titulo, int _anioEdicion, float _precioBase, int _ISBN, const string& _autorPrincipal, bool _bestSeller)
-        : publicacion(_titulo, _anioEdicion, _precioBase), ISBN(_ISBN), autorPrincipal(_autorPrincipal), bestSeller(_bestSeller) {}
+    libro(const string& _titulo, int _anioEdicion, float _precioBase, int _ISBN, const string& _autorPrincipal, bool _bestSeller): 
+    publicacion(_titulo, _anioEdicion, _precioBase), 
+    ISBN(_ISBN), 
+    autorPrincipal(_autorPrincipal), bestSeller(_bestSeller) {}
 
-    virtual ~libro() {}
+    ~libro(){
+        // 
+    }
 
-    bool esBestSeller() const {
+    // void listarInformacion(){
+    //     // 
+    // }
+
+    bool esBestSeller(){
         return bestSeller;
     }
 
-    float calcularPrecio() const override {
+    float calcularPrecio(){
         float costo = getPrecioBase();
-        if (bestSeller) {
-            costo *= 1.1;
+        if (bestSeller)
+        {
+            costo = costo*1.1;
+            
         }
-        costo *= 1.21;
+        costo = costo*1.21;
         return costo;
     }
+    
 };
 
-class revista : public publicacion {
+// revista.h
+#include <iostream>
+#include "publicacion.h"
+using namespace std;
+
+class revista : public publicacion
+{
 private:
-    int ISSN;
+    int ISSN; //?
     int numero;
     int volumen;
     string campoTematico;
 
 public:
-    revista(const string& _titulo, int _anioEdicion, float _precioBase, int _ISSN, int _numero, int _volumen, const string& _campoTematico)
-        : publicacion(_titulo, _anioEdicion, _precioBase), ISSN(_ISSN), numero(_numero), volumen(_volumen), campoTematico(_campoTematico) {}
+    revista(const string& _titulo, int _anioEdicion, float _precioBase, int _ISSN, int _numero, int _volumen, const string& _campoTematico): 
+    publicacion(_titulo, _anioEdicion, _precioBase), 
+    ISSN(_ISSN), 
+    numero(_numero), 
+    volumen(_volumen), 
+    campoTematico(_campoTematico) {}
 
-    virtual ~revista() {}
+    ~revista(){
+        // 
+    }
 
-    float calcularPrecio() const override {
+    float calcularPrecio(){
         float costo = getPrecioBase();
-        if (getAnioEdicion() > 5) {
-            costo *= 0.85;
+        if (getAnioEdicion()>5)
+        {
+            return costo;
+        }else
+        {
+            costo = costo*0.85;
         }
-        costo *= 1.21;
+        costo = costo*1.21;
         return costo;
     }
 };
 
-//implementar puntero
-//no usar #include vector
-class venta {
+// venta.h
+#include <iostream>
+#include "publicacion.h"
+using namespace std;
+
+// relacion de agregacion entre venta y publicacion
+class venta
+{
 private:
     int codigoVenta;
     string fechaVenta;
-    vector<publicacion*> articulosVendidos;
-
+    publicacion** articulosVenidos;
+    // add
+    int numArticulos;    
 public:
-    venta(int _codigoVenta, const string& _fechaVenta)
-        : codigoVenta(_codigoVenta), fechaVenta(_fechaVenta) {}
-
-    ~venta() {
-        for (publicacion* p : articulosVendidos) {
-            delete p;
-        }
-    }
-
-    void agregarArticulo(publicacion* articulo) {
-        articulosVendidos.push_back(articulo);
-    }
-
-    void listarInformacion() const {
-        cout << "Código de Venta: " << codigoVenta << endl;
-        cout << "Fecha de Venta: " << fechaVenta << endl;
-        cout << "Artículos vendidos:" << endl;
-        for (const publicacion* p : articulosVendidos) {
-            p->listarInformacion();
-            cout << "Precio de venta: " << p->calcularPrecio() << endl;
-        }
-    }
-
-    float calcularMontoVenta() const {
-        float montoTotal = 0.0;
-        for (const publicacion* p : articulosVendidos) {
-            montoTotal += p->calcularPrecio();
-        }
-        return montoTotal;
-    }
-};
-
-//implementar puntero
-//no usar #include vector
-class sistema {
-private:
-    vector<venta*> ventasRealizadas;
-
-public:
-    sistema() {}
-
-    ~sistema() {
-        for (venta* v : ventasRealizadas) {
-            delete v;
-        }
-    }
-
-    void registrarVenta(venta* nuevaVenta) {
-        ventasRealizadas.push_back(nuevaVenta);
-    }
-
-    void listarVentasEnFecha(const string& fecha) const {
-        cout << "Ventas realizadas en la fecha " << fecha << ":" << endl;
-        for (const venta* v : ventasRealizadas) {
-            if (v->fechaVenta == fecha) {
-                v->listarInformacion();
-                cout << "Monto de la venta: " << v->calcularMontoVenta() << endl;
-            }
-        }
-    }
-
-    float calcularMontoTotalEnMes(int mes) const {
-        float montoTotal = 0.0;
-        for (const venta* v : ventasRealizadas) {
-            // Suponiendo que la fecha de venta está en formato "YYYY-MM-DD"
-            int ventaMes = stoi(v->fechaVenta.substr(5, 2));
-            if (ventaMes == mes) {
-                montoTotal += v->calcularMontoVenta();
-            }
-        }
-        return montoTotal;
-    }
-};
-
-int main() {
-    sistema libreria;
-
-    // Crear algunas publicaciones
-    publicacion* libro1 = new libro("El Libro de la Selva", 2000, 15.0, 123456789, "Rudyard Kipling", true);
-    publicacion* revista1 = new revista("National Geographic", 2021, 10.0, 987654321, 5, 100, "Ciencia");
-
-    // Crear una venta
-    venta* venta1 = new venta(1, "2023-09-27");
-    venta1->agregarArticulo(libro1);
-    venta1->agregarArticulo(revista1);
-
-    // Registrar la venta en el sistema
-    libreria.registrarVenta(venta1);
-
-    // Listar ventas en una fecha específica
-    libreria.listarVentasEnFecha("2023-09-27");
-
-    // Calcular el monto total en un mes específico
-    float montoTotalMes = libreria.calcularMontoTotalEnMes(9);
-    cout << "Monto total en el mes de septiembre: " << montoTotalMes << endl;
-
-    return 0;
-}
-
-------
-
-class venta {
-private:
-    int codigoVenta;
-    string fechaVenta;
-    publicacion** articulosVendidos;
-    int numArticulos;
-
-public:
-    venta(int _codigoVenta, const string& _fechaVenta)
-        : codigoVenta(_codigoVenta), fechaVenta(_fechaVenta), articulosVendidos(nullptr), numArticulos(0) {}
-
+    venta(int _codigoVenta, const string& _fechaVenta): codigoVenta(_codigoVenta), 
+    fechaVenta(_fechaVenta){}
+    
     ~venta() {
         for (int i = 0; i < numArticulos; i++) {
-            delete articulosVendidos[i];
+            delete articulosVenidos[i];
         }
-        delete[] articulosVendidos;
+        delete[] articulosVenidos;
     }
 
     void agregarArticulo(publicacion* articulo) {
-        // Redimensionar el arreglo dinámico para agregar el nuevo artículo
+        // 
         publicacion** temp = new publicacion*[numArticulos + 1];
         for (int i = 0; i < numArticulos; i++) {
-            temp[i] = articulosVendidos[i];
+            temp[i] = articulosVenidos[i];
         }
         temp[numArticulos] = articulo;
-        delete[] articulosVendidos;
-        articulosVendidos = temp;
+        delete[] articulosVenidos;
+        articulosVenidos = temp;
         numArticulos++;
     }
+    
 
     void listarInformacion() const {
         cout << "Código de Venta: " << codigoVenta << endl;
         cout << "Fecha de Venta: " << fechaVenta << endl;
         cout << "Artículos vendidos:" << endl;
         for (int i = 0; i < numArticulos; i++) {
-            articulosVendidos[i]->listarInformacion();
-            cout << "Precio de venta: " << articulosVendidos[i]->calcularPrecio() << endl;
+            articulosVenidos[i]->listarInformacion();
+            cout << "Precio de venta: " << articulosVenidos[i]->calcularPrecio() << endl;
         }
     }
 
     float calcularMontoVenta() const {
         float montoTotal = 0.0;
         for (int i = 0; i < numArticulos; i++) {
-            montoTotal += articulosVendidos[i]->calcularPrecio();
+            montoTotal += articulosVenidos[i]->calcularPrecio();
         }
         return montoTotal;
     }
+
+    // add
+    string getFechaVenta(){
+        return fechaVenta;
+    }
 };
 
-class sistema {
+
+// sistema.h
+#include <iostream>
+#include "venta.h"
+using namespace std;
+
+// relacion de composicion entre venta y sistema
+class sistema
+{
 private:
+    // add
     venta** ventasRealizadas;
     int numVentas;
 
 public:
-    sistema() : ventasRealizadas(nullptr), numVentas(0) {}
+    sistema(): 
+    ventasRealizadas(NULL), 
+    numVentas(0) {}
 
     ~sistema() {
         for (int i = 0; i < numVentas; i++) {
             delete ventasRealizadas[i];
         }
         delete[] ventasRealizadas;
-    }
+    }   
 
+    // add
     void registrarVenta(venta* nuevaVenta) {
-        // Redimensionar el arreglo dinámico para agregar la nueva venta
+        // 
         venta** temp = new venta*[numVentas + 1];
         for (int i = 0; i < numVentas; i++) {
             temp[i] = ventasRealizadas[i];
@@ -270,28 +222,30 @@ public:
         numVentas++;
     }
 
+    // add
     void listarVentasEnFecha(const string& fecha) const {
         cout << "Ventas realizadas en la fecha " << fecha << ":" << endl;
         for (int i = 0; i < numVentas; i++) {
-            if (ventasRealizadas[i]->fechaVenta == fecha) {
+            if (ventasRealizadas[i]->getFechaVenta() == fecha) {
                 ventasRealizadas[i]->listarInformacion();
                 cout << "Monto de la venta: " << ventasRealizadas[i]->calcularMontoVenta() << endl;
             }
         }
     }
 
-    float calcularMontoTotalEnMes(int mes) const {
+    float calcularMontoTotalEnMes(int mes){
         float montoTotal = 0.0;
         for (int i = 0; i < numVentas; i++) {
-            // Suponiendo que la fecha de venta está en formato "YYYY-MM-DD"
-            int ventaMes = stoi(ventasRealizadas[i]->fechaVenta.substr(5, 2));
+            int ventaMes = stoi(ventasRealizadas[i]->getFechaVenta().substr(5, 2));
             if (ventaMes == mes) {
                 montoTotal += ventasRealizadas[i]->calcularMontoVenta();
             }
         }
         return montoTotal;
     }
+
 };
+
 
 
 
