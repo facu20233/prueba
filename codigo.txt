@@ -1,172 +1,98 @@
-La librería ParadigmasUNT vende libros y revistas y desea implementar un sistema que
-le permita digitalizar las ventas y llevar un control de las mismas. Para ello, tenga en
-cuenta que:
-- De cada venta se conoce el código de venta, la fecha en que se realizó y los
-artículos que se vendieron. Dada una venta, se debe poder listar la información y
-calcular el monto total de la misma.
-- El sistema de la librería, debe poder crear una venta, llevar un registro de las ventas
-realizadas, listar la información de las ventas realizadas en una determinada fecha y
-calcular el monto total recaudado en un determinado mes.
-
-a. Implemente el mismo en C++, tenga en cuenta que la clase base de la jerarquía debe ser
-abstracta e incluir las funciones virtuales necesarias para establecer el comportamiento
-polimórfico adecuado.
-b. Escriba un programa de prueba para verificar que su implementación funciona
-correctamente. 
-
-
-
 // publicacion.h
-#include <iostream>
-using namespace std;
+#pragma once
+#include <string>
 
-class publicacion
-{
-    
+class publicacion {
 private:
-    string titulo;
+    std::string titulo;
     int anioEdicion;
-    float PrecioBase; 
+    float precioBase;
 
 public:
     publicacion();
-    ~publicacion();
+    virtual ~publicacion();
 
-    void listarInformacion(){
-        std::cout << "listar info" << std::endl; 
-    }
+    virtual void listarInformacion();
+    virtual float calcularPrecio();
 
-    virtual float calcularPrecio(){
-        return PrecioBase; //corregir
-    }
-
-    // get
-    float getPrecioBase(){
-        return PrecioBase;
-    }
-
-    int getAnioEdicion(){
-        return anioEdicion;
-    }
-    
-
+    // getters
+    float getPrecioBase();
+    int getAnioEdicion();
 };
 
 // libro.h
-#include <iostream>
+#pragma once
 #include "publicacion.h"
-using namespace std;
 
-class libro : public publicacion
-{
+class libro : public publicacion {
 private:
-    int ISBN; //? 
-    string autorPrincipal;
+    int ISBN;
+    std::string autorPrincipal;
     bool bestSeller;
-    
+
 public:
     libro();
     ~libro();
 
-    bool esBestSeller(){
-        return bestSeller;
-    }
-
-    float calcularPrecio(){
-        float costo = getPrecioBase();
-        if (bestSeller)
-        {
-            costo = costo*1.1;
-            costo = costo*1.21;
-        }
-        return costo;
-    }
-    
+    bool esBestSeller();
+    float calcularPrecio() override; // Override de la función virtual
 };
 
 // revista.h
-#include <iostream>
+#pragma once
 #include "publicacion.h"
-using namespace std;
 
-class revista : public publicacion
-{
+class revista : public publicacion {
 private:
-    int ISSN; //?
+    int ISSN;
     int numero;
     int volumen;
-    string campoTematico;
+    std::string campoTematico;
 
 public:
-    revista(/* args */);
+    revista();
     ~revista();
 
-    float calcularPrecio(){
-        float costo = getPrecioBase();
-        if (getAnioEdicion()>5)
-        {
-            return costo;
-        }else
-        {
-            costo = costo*0.85;
-        }
-
-        return costo*1.21;
-        
-        
-    }
+    float calcularPrecio() override; // Override de la función virtual
 };
 
-// venta.h
-#include <iostream>
-using namespace std;
 
-// relacion de agregacion entre venta y publicacion
-class venta
-{
+---------
+
+// venta.h
+#pragma once
+#include <vector>
+#include "publicacion.h"
+
+class venta {
 private:
     int codigoVenta;
     int fechaVenta;
+    std::vector<publicacion*> publicacionesVendidas; // Vector de punteros a publicaciones
+
 public:
-    venta(/* args */);
+    venta(int codigo, int fecha);
     ~venta();
 
-    void listarInformacion(){
-        // 
-    }
-
-    float calcularMontoVenta(){
-        // 
-    }
+    void agregarPublicacion(publicacion* p);
+    void listarInformacion();
+    float calcularMontoVenta();
 };
 
 // sistema.h
-#include <iostream>
-using namespace std;
+#pragma once
+#include <vector>
+#include "venta.h"
 
-// relacion de composicion entre venta y sistema
-class sistema
-{
+class sistema {
 private:
-    /* data */
+    std::vector<venta*> ventasRealizadas; // Vector de punteros a ventas
+
 public:
-    sistema(/* args */);
+    sistema();
     ~sistema();
 
-    void listarInformacion(){
-        // 
-    }
-
-    float calcularMontoTotal(){
-        // 
-    }
-
+    void crearVenta(int codigo, int fecha);
+    void listarVentasPorFecha(int fecha);
+    float calcularMontoTotalMes(int mes);
 };
-
-
-
-
-
-
-
-
