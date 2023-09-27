@@ -84,7 +84,7 @@ public:
     }
 };
 
-//puntero
+//implementar puntero
 //no usar #include vector
 class venta {
 private:
@@ -125,6 +125,8 @@ public:
     }
 };
 
+//implementar puntero
+//no usar #include vector
 class sistema {
 private:
     vector<venta*> ventasRealizadas;
