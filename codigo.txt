@@ -8,6 +8,13 @@ calcular el monto total de la misma.
 realizadas, listar la información de las ventas realizadas en una determinada fecha y
 calcular el monto total recaudado en un determinado mes.
 
+a. Implemente el mismo en C++, tenga en cuenta que la clase base de la jerarquía debe ser
+abstracta e incluir las funciones virtuales necesarias para establecer el comportamiento
+polimórfico adecuado.
+b. Escriba un programa de prueba para verificar que su implementación funciona
+correctamente. 
+
+
 
 // publicacion.h
 #include <iostream>
