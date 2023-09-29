@@ -1,3 +1,25 @@
-'Cadeteria' does not contain a definition for 'GetInstance'CS0117
+public class Cadeteria
+{
+    // Declarar una instancia privada y estática de Cadeteria
+    private static Cadeteria instance;
 
- private Cadeteria CadeteriaInstance = Cadeteria.GetInstance();
+    // Constructor privado para evitar la creación de instancias desde fuera de la clase
+    private Cadeteria()
+    {
+        // Inicializa la cadetería aquí si es necesario
+    }
+
+    // Método estático para obtener la instancia única de Cadeteria
+    public static Cadeteria GetInstance()
+    {
+        if (instance == null)
+        {
+            instance = new Cadeteria();
+        }
+        return instance;
+    }
+
+    // Resto de la implementación de la clase Cadeteria
+    // ...
+
+}
