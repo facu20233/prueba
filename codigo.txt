@@ -1,8 +1,13 @@
-Inconsistent accessibility: return type 'ActionResult<IEnumerable<Pedido>>' is less accessible than method 'CadeteriaController.GetPedidos()'CS0050
-
-[HttpGet("GetPedidos")]
-    public ActionResult<IEnumerable<Pedido>> GetPedidos()
+public ActionResult<Informe> GetInforme()
     {
-        var pedidos = CadeteriaInstance.ListadoPedidos;
-        return Ok(pedidos);
+        // Implementa lógica para obtener el informe
+        Informe informe = new Informe(); // Reemplaza esto con la lógica real
+        return Ok(informe);
+    }
+
+public ActionResult<Informe> GetInforme()
+    {
+        // Implementa lógica para obtener el informe
+        Informe informe = new Informe(); // Reemplaza esto con la lógica real
+        return Ok(informe);
     }
