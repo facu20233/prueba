@@ -1,280 +1,492 @@
-// publicacion.h
-#include <iostream>
-using namespace std;
+// pedidos.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace EspacioCadeteria;
 
-class publicacion
+class Pedido
+{   
+    private int numero;
+    private string observacion;
+    private Cliente cliente;
+    private string estado;
+    public Cadete CadeteAsignado { get; set; }
+
+    public int Numero { get => numero; set => numero = value; }
+    public string Observacion { get => observacion; set => observacion = value; }
+    internal Cliente Cliente { get => cliente; set => cliente = value; }
+    public string Estado { get => estado; set => estado = value; }
+
+    public Pedido(int numero, string observacion, Cliente cliente, string estado, Cadete cadete)
+    {
+        this.Numero = numero;
+        this.Observacion = observacion;
+        this.Cliente = cliente;
+        this.Estado = estado;
+        this.CadeteAsignado = cadete;
+    }
+
+    public void VerDireccionCliente()
+    {
+        Console.WriteLine($"Dirección del Cliente: {Cliente.Direccion}");
+    }
+
+    public void VerDatosCliente()
+    {
+        Console.WriteLine($"Nombre del Cliente: {Cliente.Nombre}");
+        Console.WriteLine($"Teléfono del Cliente: {Cliente.Telefono}");
+    }
+
+    public string ObtenerEstado()
+    {
+        return Estado;
+    }
+}
+
+// cliente.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace EspacioCadeteria;
+
+
+class Cliente
 {
+    private string nombre;
+    private string direccion;
+    private string telefono;
+    private string datosReferenciaDireccion;
+
+    public string Nombre1 { get => Nombre; set => Nombre = value; }
+    public string Direccion1 { get => Direccion; set => Direccion = value; }
+    public string Telefono1 { get => Telefono; set => Telefono = value; }
+    public string DatosReferenciaDireccion1 { get => DatosReferenciaDireccion; set => DatosReferenciaDireccion = value; }
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Direccion { get => direccion; set => direccion = value; }
+    public string Telefono { get => telefono; set => telefono = value; }
+    public string DatosReferenciaDireccion { get => datosReferenciaDireccion; set => datosReferenciaDireccion = value; }
+
+    public Cliente(string nombre, string direccion, string telefono, string datosReferenciaDireccion)
+    {
+        this.Nombre1 = nombre;
+        this.Direccion1 = direccion;
+        this.Telefono1 = telefono;
+        this.DatosReferenciaDireccion1 = datosReferenciaDireccion;
+    }
+
+
+
     
-private:
-    string titulo;
-    int anioEdicion;
-    float PrecioBase; 
+}
 
-public:
-    publicacion(const string& _titulo, int _anioEdicion, float _precioBase): 
-    titulo(_titulo), 
-    anioEdicion(_anioEdicion), 
-    PrecioBase(_precioBase) {}
+// cadete.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace EspacioCadeteria;
 
-    virtual ~publicacion();
 
-    virtual void listarInformacion() const {
-        cout << "Título: " << titulo << endl;
-        cout << "Año de Edición: " << anioEdicion << endl;
-        cout << "Precio Base: " << PrecioBase << endl;
-    }
-    virtual float calcularPrecio(){
-        return PrecioBase; //corregir
-    }
-
-    // get
-    float getPrecioBase(){
-        return PrecioBase;
-    }
-
-    int getAnioEdicion(){
-        return anioEdicion;
-    }
-    
-
-};
-
-// libro.h
-#include <iostream>
-#include "publicacion.h"
-using namespace std;
-
-class libro : public publicacion
+class Cadete
 {
-private:
-    int ISBN; //? 
-    string autorPrincipal;
-    bool bestSeller;
-    
-public:
-    libro(const string& _titulo, int _anioEdicion, float _precioBase, int _ISBN, const string& _autorPrincipal, bool _bestSeller): 
-    publicacion(_titulo, _anioEdicion, _precioBase), 
-    ISBN(_ISBN), 
-    autorPrincipal(_autorPrincipal), bestSeller(_bestSeller) {}
+    private int id;
+    private string nombre;
+    private string direccion;
+    private string telefono;
+    // private List<Pedido> listadoPedidos = new List<Pedido>();
+    // public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
 
-    ~libro(){
-        // 
+    public int Id { get => id; set => id = value; }
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Direccion { get => direccion; set => direccion = value; }
+    public string Telefono { get => telefono; set => telefono = value; }
+    
+
+    public Cadete(int id, string nombre, string direccion, string telefono)
+    {
+        this.Id = id;
+        this.Nombre = nombre;
+        this.Direccion = direccion;
+        this.Telefono = telefono;
     }
 
-    // void listarInformacion(){
-    //     // 
+    // public decimal JornalACobrar()
+    // {
+    //     int pedidosEntregados = ListadoPedidos.Count(p => p.Estado == "E");
+    //     return pedidosEntregados * 500;
     // }
 
-    bool esBestSeller(){
-        return bestSeller;
-    }
 
-    float calcularPrecio(){
-        float costo = getPrecioBase();
-        if (bestSeller)
+//     public void AgregarPedido(Pedido pedido)
+//     {
+//         ListadoPedidos.Add(pedido);
+//     }
+
+//     public void EliminarPedido(Pedido pedido)
+//     {
+//         ListadoPedidos.Remove(pedido);
+//     }
+
+
+
+//     public string Estado()
+// {
+//     if (ListadoPedidos.Any(p => p.Estado == "P"))
+//     {
+//         return "P"; // Pendiente
+//     }
+//     else if (ListadoPedidos.Any(p => p.Estado == "C"))
+//     {
+//         return "C"; // Cancelado
+//     }
+//     else
+//     {
+//         return "E"; // Entregado
+//     }
+
+
+    public static List<Cadete> CargarCadetesDesdeCSV(string filePath)
+    {
+
+        List<Cadete> cadetes = new List<Cadete>();
+
+        try
         {
-            costo = costo*1.1;
-            
-        }
-        costo = costo*1.21;
-        return costo;
-    }
-    
-};
+            var lines = File.ReadAllLines(filePath);
+            foreach (var line in lines.Skip(1)) // Saltar la primera línea (encabezados)
+            {
+                var parts = line.Split(',');
+                if (parts.Length == 4)
+                {
+                    int id = int.Parse(parts[0]);
+                    string nombre = parts[1];
+                    string direccion = parts[2];
+                    string telefono = parts[3];
 
-// revista.h
-#include <iostream>
-#include "publicacion.h"
-using namespace std;
-
-class revista : public publicacion
-{
-private:
-    int ISSN; //?
-    int numero;
-    int volumen;
-    string campoTematico;
-
-public:
-    revista(const string& _titulo, int _anioEdicion, float _precioBase, int _ISSN, int _numero, int _volumen, const string& _campoTematico): 
-    publicacion(_titulo, _anioEdicion, _precioBase), 
-    ISSN(_ISSN), 
-    numero(_numero), 
-    volumen(_volumen), 
-    campoTematico(_campoTematico) {}
-
-    ~revista(){
-        // 
-    }
-
-    float calcularPrecio(){
-        float costo = getPrecioBase();
-        if (getAnioEdicion()>5)
-        {
-            return costo;
-        }else
-        {
-            costo = costo*0.85;
-        }
-        costo = costo*1.21;
-        return costo;
-    }
-};
-
-// venta.h
-#include <iostream>
-#include "publicacion.h"
-using namespace std;
-
-// relacion de agregacion entre venta y publicacion
-class venta
-{
-private:
-    int codigoVenta;
-    string fechaVenta;
-    publicacion** articulosVenidos;
-    // add
-    int numArticulos;    
-public:
-    venta(int _codigoVenta, const string& _fechaVenta): codigoVenta(_codigoVenta), 
-    fechaVenta(_fechaVenta){}
-    
-    ~venta() {
-        for (int i = 0; i < numArticulos; i++) {
-            delete articulosVenidos[i];
-        }
-        delete[] articulosVenidos;
-    }
-
-    void agregarArticulo(publicacion* articulo) {
-        // 
-        publicacion** temp = new publicacion*[numArticulos + 1];
-        for (int i = 0; i < numArticulos; i++) {
-            temp[i] = articulosVenidos[i];
-        }
-        temp[numArticulos] = articulo;
-        delete[] articulosVenidos;
-        articulosVenidos = temp;
-        numArticulos++;
-    }
-    
-
-    void listarInformacion() const {
-        cout << "Código de Venta: " << codigoVenta << endl;
-        cout << "Fecha de Venta: " << fechaVenta << endl;
-        cout << "Artículos vendidos:" << endl;
-        for (int i = 0; i < numArticulos; i++) {
-            articulosVenidos[i]->listarInformacion();
-            cout << "Precio de venta: " << articulosVenidos[i]->calcularPrecio() << endl;
-        }
-    }
-
-    float calcularMontoVenta() const {
-        float montoTotal = 0.0;
-        for (int i = 0; i < numArticulos; i++) {
-            montoTotal += articulosVenidos[i]->calcularPrecio();
-        }
-        return montoTotal;
-    }
-
-    // add
-    string getFechaVenta(){
-        return fechaVenta;
-    }
-};
-
-
-// sistema.h
-#include <iostream>
-#include "venta.h"
-using namespace std;
-
-// relacion de composicion entre venta y sistema
-class sistema
-{
-private:
-    // add
-    venta** ventasRealizadas;
-    int numVentas;
-
-public:
-    sistema(): 
-    ventasRealizadas(NULL), 
-    numVentas(0) {}
-
-    ~sistema() {
-        for (int i = 0; i < numVentas; i++) {
-            delete ventasRealizadas[i];
-        }
-        delete[] ventasRealizadas;
-    }   
-
-    // add
-    void registrarVenta(venta* nuevaVenta) {
-        // 
-        venta** temp = new venta*[numVentas + 1];
-        for (int i = 0; i < numVentas; i++) {
-            temp[i] = ventasRealizadas[i];
-        }
-        temp[numVentas] = nuevaVenta;
-        delete[] ventasRealizadas;
-        ventasRealizadas = temp;
-        numVentas++;
-    }
-
-    // add
-    void listarVentasEnFecha(const string& fecha) const {
-        cout << "Ventas realizadas en la fecha " << fecha << ":" << endl;
-        for (int i = 0; i < numVentas; i++) {
-            if (ventasRealizadas[i]->getFechaVenta() == fecha) {
-                ventasRealizadas[i]->listarInformacion();
-                cout << "Monto de la venta: " << ventasRealizadas[i]->calcularMontoVenta() << endl;
+                    Cadete cadete = new Cadete(id, nombre, direccion, telefono);
+                    cadetes.Add(cadete);
+                }
             }
         }
-    }
-
-    float calcularMontoTotalEnMes(int mes){
-        float montoTotal = 0.0;
-        for (int i = 0; i < numVentas; i++) {
-            int ventaMes = stoi(ventasRealizadas[i]->getFechaVenta().substr(5, 2));
-            if (ventaMes == mes) {
-                montoTotal += ventasRealizadas[i]->calcularMontoVenta();
-            }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al cargar los cadetes desde el archivo CSV: " + ex.Message);
         }
-        return montoTotal;
+
+        return cadetes;
     }
 
-};
-
-b. Escriba un programa de prueba para verificar que su implementación funciona
-correctamente. 
-
-
-int main() {
-    // Crear algunas publicaciones
-    publicacion* libro1 = new libro("El Libro de la Selva", 2000, 15.0, 123456789, "Rudyard Kipling", true);
-    publicacion* revista1 = new revista("National Geographic", 2021, 10.0, 987654321, 5, 100, "Ciencia");
-
-    // Crear una venta
-    venta* venta1 = new venta(1, "2023-09-27");
-    venta1->agregarArticulo(libro1);
-    venta1->agregarArticulo(revista1);
-
-    // Registrar la venta en el sistema
-    sistema libreria;
-    libreria.registrarVenta(venta1);
-
-    // Listar ventas en una fecha específica
-    libreria.listarVentasEnFecha("2023-09-27");
-
-    // Calcular el monto total en un mes específico
-    float montoTotalMes = libreria.calcularMontoTotalEnMes(9);
-    cout << "Monto total en el mes de septiembre: " << montoTotalMes << endl;
-
-    // Liberar memoria
-    delete libro1;
-    delete revista1;
-
-    return 0;
 }
+
+// cadeteria.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace EspacioCadeteria;
+
+
+class Cadeteria
+    {
+        private string nombre;
+        private string telefono;
+
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Telefono { get => telefono; set => telefono = value; }
+
+        private List<Cadete> listadoCadetes = new List<Cadete>();
+        public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
+
+        private List<Pedido> listadoPedidos = new List<Pedido>();
+        public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
+
+        public Cadeteria(string nombre, string telefono)
+        {
+            this.Nombre = nombre;
+            this.Telefono = telefono;
+        }
+
+        public void AgregarCadete(Cadete cadete)
+        {
+            ListadoCadetes.Add(cadete);
+        }
+
+        public void EliminarCadete(Cadete cadete)
+        {
+            ListadoCadetes.Remove(cadete);
+        }
+
+        public static Cadeteria CargarCadeteriaDesdeCSV(string nombre, string telefono, List<Cadete> cadetes)
+        {
+            Cadeteria cadeteria = new Cadeteria(nombre, telefono);
+            cadeteria.ListadoCadetes.AddRange(cadetes);
+            return cadeteria;
+        }
+
+        public decimal CalcularJornal(int cadeteId)
+        {
+            int pedidosEntregados = ListadoPedidos.Count(p => p.Estado == "E" && p.CadeteAsignado != null && p.CadeteAsignado.Id == cadeteId);
+            return pedidosEntregados * 500; // Suponiendo que el pago es de 500 por pedido entregado.
+        }
+
+        public void AsignarCadeteAPedido(int cadeteId, int pedidoId)
+        {
+            Pedido pedido = ListadoPedidos.FirstOrDefault(p => p.Numero == pedidoId);
+            if (pedido != null)
+            {
+                Cadete cadete = ListadoCadetes.FirstOrDefault(c => c.Id == cadeteId);
+                pedido.CadeteAsignado = cadete;
+            }
+        }
+
+        public void AgregarPedido(int numero, string observacion, string nombreCliente, string direccionCliente, string telefonoCliente, string estado)
+        {
+            Cliente cliente = new Cliente(nombreCliente, direccionCliente, telefonoCliente, "");
+            Pedido pedido = new Pedido(numero, observacion, cliente, estado, null);
+            ListadoPedidos.Add(pedido);
+        }
+
+        public void EliminarPedido(Pedido pedido)
+        {
+            ListadoPedidos.Remove(pedido);
+        }
+
+        public string CalcularEstado()
+        {
+            if (ListadoPedidos.Any(p => p.Estado == "P"))
+            {
+                return "P"; // Pendiente
+            }
+            else if (ListadoPedidos.Any(p => p.Estado == "C"))
+            {
+                return "C"; // Cancelado
+            }
+            else
+            {
+                return "E"; // Entregado
+            }
+        }
+
+        public Pedido BuscarPedidoPorNumero(int numeroPedido)
+        {
+            return ListadoPedidos.FirstOrDefault(p => p.Numero == numeroPedido);
+        }
+
+        public Cadete BuscarCadetePorId(int idCadete)
+        {
+            return ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+        }
+
+        public void ReasignarPedidoAPedido(Pedido pedido, Cadete nuevoCadete)
+        {
+            if (pedido.CadeteAsignado != null)
+            {
+                pedido.CadeteAsignado = null;
+            }
+            pedido.CadeteAsignado = nuevoCadete;
+        }
+    }
+
+// accesoaAdatos.cs
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+namespace EspacioCadeteria;
+
+abstract class AccesoADatos
+{
+    public abstract List<Cadete> CargarCadetes(string filePath);
+    public abstract void GuardarCadetes(string filePath, List<Cadete> cadetes);
+    public abstract Cadeteria CargarCadeteria(string cadeteriaFilePath, string cadetesFilePath);
+    public abstract void GuardarCadeteria(string cadeteriaFilePath, Cadeteria cadeteria);
+}
+
+class AccesoCSV : AccesoADatos
+{
+
+    public override List<Cadete> CargarCadetes(string filePath)
+    {
+        List<Cadete> cadetes = new List<Cadete>();
+
+        try
+        {
+            var lines = File.ReadAllLines(filePath);
+            foreach (var line in lines.Skip(1)) // Saltar la primera línea (encabezados)
+            {
+                var parts = line.Split(',');
+                if (parts.Length == 4)
+                {
+                    int id = int.Parse(parts[0]);
+                    string nombre = parts[1];
+                    string direccion = parts[2];
+                    string telefono = parts[3];
+
+                    Cadete cadete = new Cadete(id, nombre, direccion, telefono);
+                    cadetes.Add(cadete);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al cargar los cadetes desde el archivo CSV: " + ex.Message);
+        }
+
+        return cadetes;
+    }
+
+    public override void GuardarCadetes(string filePath, List<Cadete> cadetes)
+    {
+        try
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                // Escribir encabezados
+                writer.WriteLine("ID del Cadete,Nombre,Dirección,Teléfono");
+
+                // Escribir datos de cadetes
+                foreach (var cadete in cadetes)
+                {
+                    writer.WriteLine($"{cadete.Id},{cadete.Nombre},{cadete.Direccion},{cadete.Telefono}");
+                }
+            }
+
+            Console.WriteLine("Cadetes guardados en archivo CSV correctamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al guardar cadetes en archivo CSV: " + ex.Message);
+        }
+    }
+
+    public override Cadeteria CargarCadeteria(string cadeteriaFilePath, string cadetesFilePath)
+    {
+        try
+        {
+            var lines = File.ReadAllLines(cadeteriaFilePath);
+            if (lines.Length == 2)
+            {
+                string nombre = lines[0];
+                string telefono = lines[1];
+
+                Cadeteria cadeteria = new Cadeteria(nombre, telefono);
+
+                // Cargar cadetes
+                List<Cadete> cadetes = Cadete.CargarCadetesDesdeCSV(cadetesFilePath);
+                cadeteria.ListadoCadetes.AddRange(cadetes);
+
+                return cadeteria;
+            }
+            else
+            {
+                Console.WriteLine("El archivo de la cadetería debe contener exactamente 2 líneas.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al cargar la cadetería desde el archivo CSV: " + ex.Message);
+        }
+
+        return null;
+    }
+
+    public override void GuardarCadeteria(string cadeteriaFilePath, Cadeteria cadeteria)
+    {
+        try
+        {
+            using (StreamWriter writer = new StreamWriter(cadeteriaFilePath))
+            {
+                // Escribir nombre y teléfono de la cadetería
+                writer.WriteLine($"{cadeteria.Nombre},{cadeteria.Telefono}");
+
+                // Escribir datos de cadetes de la cadetería
+                foreach (var cadete in cadeteria.ListadoCadetes)
+                {
+                    writer.WriteLine($"{cadete.Id},{cadete.Nombre},{cadete.Direccion},{cadete.Telefono}");
+                }
+            }
+
+            Console.WriteLine("Cadetería guardada en archivo CSV correctamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al guardar la cadetería en archivo CSV: " + ex.Message);
+        }
+    }
+}
+
+class AccesoJSON : AccesoADatos
+{
+    public override List<Cadete> CargarCadetes(string filePath)
+    {
+        List<Cadete> cadetes = new List<Cadete>();
+
+        try
+        {
+            string jsonText = File.ReadAllText(filePath);
+            cadetes = JsonSerializer.Deserialize<List<Cadete>>(jsonText);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al cargar los cadetes desde el archivo JSON: " + ex.Message);
+        }
+
+        return cadetes;
+    }
+
+    public override void GuardarCadetes(string filePath, List<Cadete> cadetes)
+    {
+        try
+        {
+            string jsonText = JsonSerializer.Serialize(cadetes, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filePath, jsonText);
+            Console.WriteLine("Cadetes guardados en archivo JSON correctamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al guardar cadetes en archivo JSON: " + ex.Message);
+        }
+    }
+
+    public override Cadeteria CargarCadeteria(string cadeteriaFilePath, string cadetesFilePath)
+    {
+        Cadeteria cadeteria = null;
+
+        try
+        {
+            string cadeteriaText = File.ReadAllText(cadeteriaFilePath);
+            cadeteria = JsonSerializer.Deserialize<Cadeteria>(cadeteriaText);
+
+            List<Cadete> cadetes = CargarCadetes(cadetesFilePath);
+            cadeteria.ListadoCadetes = cadetes;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al cargar la cadetería desde el archivo JSON: " + ex.Message);
+        }
+
+        return cadeteria;
+    }
+
+    public override void GuardarCadeteria(string cadeteriaFilePath, Cadeteria cadeteria)
+    {
+        try
+        {
+            string jsonText = JsonSerializer.Serialize(cadeteria, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(cadeteriaFilePath, jsonText);
+            Console.WriteLine("Cadetería guardada en archivo JSON correctamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error al guardar la cadetería en archivo JSON: " + ex.Message);
+        }
+    }
+}
+
+
+
+
 
