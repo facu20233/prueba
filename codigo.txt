@@ -1,25 +1,8 @@
-public class Cadeteria
-{
-    // Declarar una instancia privada y estática de Cadeteria
-    private static Cadeteria instance;
+Inconsistent accessibility: return type 'ActionResult<IEnumerable<Pedido>>' is less accessible than method 'CadeteriaController.GetPedidos()'CS0050
 
-    // Constructor privado para evitar la creación de instancias desde fuera de la clase
-    private Cadeteria()
+[HttpGet("GetPedidos")]
+    public ActionResult<IEnumerable<Pedido>> GetPedidos()
     {
-        // Inicializa la cadetería aquí si es necesario
+        var pedidos = CadeteriaInstance.ListadoPedidos;
+        return Ok(pedidos);
     }
-
-    // Método estático para obtener la instancia única de Cadeteria
-    public static Cadeteria GetInstance()
-    {
-        if (instance == null)
-        {
-            instance = new Cadeteria();
-        }
-        return instance;
-    }
-
-    // Resto de la implementación de la clase Cadeteria
-    // ...
-
-}
