@@ -1,1 +1,85 @@
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+
+namespace CadeteriaWebApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CadeteriaController : ControllerBase
+    {
+        // Inicializa la cadetería utilizando un patrón Singleton
+        private Cadeteria CadeteriaInstance = Cadeteria.GetInstance();
+
+        [HttpGet("GetPedidos")]
+        public ActionResult<IEnumerable<Pedido>> GetPedidos()
+        {
+            var pedidos = CadeteriaInstance.ListadoPedidos;
+            return Ok(pedidos);
+        }
+
+        [HttpGet("GetCadetes")]
+        public ActionResult<IEnumerable<Cadete>> GetCadetes()
+        {
+            var cadetes = CadeteriaInstance.ListadoCadetes;
+            return Ok(cadetes);
+        }
+
+        [HttpGet("GetInforme")]
+        public ActionResult<Informe> GetInforme()
+        {
+            // Implementa lógica para obtener el informe
+            Informe informe = new Informe(); // Reemplaza esto con la lógica real
+            return Ok(informe);
+        }
+
+        [HttpPost("AgregarPedido")]
+        public ActionResult AgregarPedido([FromBody] Pedido pedido)
+        {
+            // Implementa lógica para agregar un pedido
+            CadeteriaInstance.AgregarPedido(pedido); // Reemplaza esto con la lógica real
+            return Ok();
+        }
+
+        [HttpPut("AsignarPedido/{idPedido}/{idCadete}")]
+        public ActionResult AsignarPedido(int idPedido, int idCadete)
+        {
+            // Implementa lógica para asignar un pedido a un cadete
+            CadeteriaInstance.AsignarCadeteAPedido(idCadete, idPedido); // Reemplaza esto con la lógica real
+            return Ok();
+        }
+
+        [HttpPut("CambiarEstadoPedido/{idPedido}/{NuevoEstado}")]
+        public ActionResult CambiarEstadoPedido(int idPedido, string NuevoEstado)
+        {
+            // Implementa lógica para cambiar el estado de un pedido
+            Pedido pedido = CadeteriaInstance.BuscarPedidoPorNumero(idPedido);
+            if (pedido != null)
+            {
+                pedido.Estado = NuevoEstado;
+                return Ok();
+            }
+            else
+            {
+                return NotFound(); // Pedido no encontrado
+            }
+        }
+
+        [HttpPut("CambiarCadetePedido/{idPedido}/{idNuevoCadete}")]
+        public ActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
+        {
+            // Implementa lógica para cambiar el cadete asignado a un pedido
+            Pedido pedido = CadeteriaInstance.BuscarPedidoPorNumero(idPedido);
+            Cadete nuevoCadete = CadeteriaInstance.BuscarCadetePorId(idNuevoCadete);
+            if (pedido != null && nuevoCadete != null)
+            {
+                CadeteriaInstance.ReasignarPedidoAPedido(pedido, nuevoCadete);
+                return Ok();
+            }
+            else
+            {
+                return NotFound(); // Pedido o cadete no encontrado
+            }
+        }
+    }
+}
 
