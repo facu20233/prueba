@@ -5,9 +5,5 @@ public ActionResult<Informe> GetInforme()
         return Ok(informe);
     }
 
-public ActionResult<Informe> GetInforme()
-    {
-        // Implementa lógica para obtener el informe
-        Informe informe = new Informe(); // Reemplaza esto con la lógica real
-        return Ok(informe);
-    }
+
+The type or namespace name 'Informe' could not be found (are you missing a using directive or an assembly reference?)CS0246
