@@ -1,9 +1,10 @@
-public ActionResult<Informe> GetInforme()
+[HttpPost("AgregarPedido")]
+    public ActionResult AgregarPedido([FromBody] Pedido pedido)
     {
-        // Implementa lógica para obtener el informe
-        Informe informe = new Informe(); // Reemplaza esto con la lógica real
-        return Ok(informe);
+        // Implementa lógica para agregar un pedido
+        
+        CadeteriaInstance.AgregarPedido(pedido); // Reemplaza esto con la lógica real
+        return Ok();
     }
 
-
-The type or namespace name 'Informe' could not be found (are you missing a using directive or an assembly reference?)CS0246
+There is no argument given that corresponds to the required parameter 'observacion' of 'Cadeteria.AgregarPedido(int, string, string, string, string, string)'CS7036
