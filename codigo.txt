@@ -1,3 +1,129 @@
+
+// cadeteria.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+namespace CadeteriaWebApi;
+
+
+public class Cadeteria
+{
+    private string nombre;
+    private string telefono;
+    private static Cadeteria instance;
+
+    public string Nombre { get => nombre; set => nombre = value; }
+    public string Telefono { get => telefono; set => telefono = value; }
+
+    private List<Cadete> listadoCadetes = new List<Cadete>();
+    public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
+
+    private List<Pedido> listadoPedidos = new List<Pedido>();
+    public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
+
+    public Cadeteria(string nombre, string telefono)
+    {
+        this.Nombre = nombre;
+        this.Telefono = telefono;
+    }
+
+    public void AgregarCadete(Cadete cadete)
+    {
+        ListadoCadetes.Add(cadete);
+    }
+
+    public void EliminarCadete(Cadete cadete)
+    {
+        ListadoCadetes.Remove(cadete);
+    }
+
+    public static Cadeteria CargarCadeteriaDesdeCSV(string nombre, string telefono, List<Cadete> cadetes)
+    {
+        Cadeteria cadeteria = new Cadeteria(nombre, telefono);
+        cadeteria.ListadoCadetes.AddRange(cadetes);
+        return cadeteria;
+    }
+
+    public decimal CalcularJornal(int cadeteId)
+    {
+        int pedidosEntregados = ListadoPedidos.Count(p => p.Estado == "E" && p.CadeteAsignado != null && p.CadeteAsignado.Id == cadeteId);
+        return pedidosEntregados * 500; // Suponiendo que el pago es de 500 por pedido entregado.
+    }
+
+    public void AsignarCadeteAPedido(int cadeteId, int pedidoId)
+    {
+        Pedido pedido = ListadoPedidos.FirstOrDefault(p => p.Numero == pedidoId);
+        if (pedido != null)
+        {
+            Cadete cadete = ListadoCadetes.FirstOrDefault(c => c.Id == cadeteId);
+            pedido.CadeteAsignado = cadete;
+        }
+    }
+
+    public void AgregarPedido(int numero, string observacion, string nombreCliente, string direccionCliente, string telefonoCliente, string estado)
+    {
+        Cliente cliente = new Cliente(nombreCliente, direccionCliente, telefonoCliente, "");
+        Pedido pedido = new Pedido(numero, observacion, cliente, estado, null);
+        ListadoPedidos.Add(pedido);
+    }
+
+    public void EliminarPedido(Pedido pedido)
+    {
+        ListadoPedidos.Remove(pedido);
+    }
+
+    public string CalcularEstado()
+    {
+        if (ListadoPedidos.Any(p => p.Estado == "P"))
+        {
+            return "P"; // Pendiente
+        }
+        else if (ListadoPedidos.Any(p => p.Estado == "C"))
+        {
+            return "C"; // Cancelado
+        }
+        else
+        {
+            return "E"; // Entregado
+        }
+    }
+
+    public Pedido BuscarPedidoPorNumero(int numeroPedido)
+    {
+        return ListadoPedidos.FirstOrDefault(p => p.Numero == numeroPedido);
+    }
+
+    public Cadete BuscarCadetePorId(int idCadete)
+    {
+        return ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+    }
+
+    public void ReasignarPedidoAPedido(Pedido pedido, Cadete nuevoCadete)
+    {
+        if (pedido.CadeteAsignado != null)
+        {
+            pedido.CadeteAsignado = null;
+        }
+        pedido.CadeteAsignado = nuevoCadete;
+    }
+
+    private Cadeteria()
+    {
+        // 
+    }
+
+    public static Cadeteria GetInstance()
+    {
+        if (instance == null)
+        {
+            instance = new Cadeteria();
+        }
+        return instance;
+    }
+
+}
+
 [HttpPost("AgregarPedido")]
     public ActionResult AgregarPedido([FromBody] Pedido pedido)
     {
@@ -7,4 +133,3 @@
         return Ok();
     }
 
-There is no argument given that corresponds to the required parameter 'observacion' of 'Cadeteria.AgregarPedido(int, string, string, string, string, string)'CS7036
