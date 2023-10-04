@@ -1,135 +1,171 @@
+Resumen
+Se necesita computarizar el proceso de alquiler de películas de una empresa que ofrece
+distribución digital de contenido multimedia (streaming) a través de Internet. Esta empresa ofrece
+un servicio de alquiler de películas online. El usuario al alquilar una película mediante este sistema
+tiene disponible la misma por un día con solo conectarse a su cuenta a través de un dispositivo
+smart. A fin de mes se realiza la facturación al cliente en función de las películas alquiladas en ese
+período.
+Tareas
+1) Teniendo en cuenta los siguientes requerimientos del sistema, realice un diagrama de clases
+detallado que incluya: atributos, métodos y relaciones, notas y/o aclaraciones que crea
+conveniente:
+• La cuenta del usuario le permite conectarse a través de un dispositivo smart y acceder al
+contenido digital. De cada cuenta de usuario se conoce la dirección de correo electrónico
+e información de la tarjeta de crédito, además de los alquileres realizados.
+• Desde una cuenta de usuario se puede calcular el monto a pagar en un determinado mes
+del año. El monto a pagar en un determinado mes se calcula como el monto fijo que se
+cobra por el servicio de streaming (monto común a todas las cuentas) más el costo de
+cada una de las películas alquiladas durante el mes que se desea facturar.
+• De cada alquiler se registra la/s película/s alquiladas (con un máximo de 5 películas por
+alquiler) y la fecha en la que se produce el mismo.
+• De cada película se registra el nombre, fecha de estreno y el precio base de alquiler. Las
+películas pueden ser Nacionales o Internacionales. De las películas Internacionales se
+conoce además su país de origen. Para favorecer al cine nacional, el costo de alquilar
+cualquier película Internacional tiene un incremento del 30% sobre el precio base de la
+película. En cambio, las películas Nacionales cuentan con un descuento del 20% sobre
+el precio base solo si pasaron más de 10 años desde su fecha de estreno. 
 
-// cadeteria.cs
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-namespace CadeteriaWebApi;
+// sistema.h
+#include <iostream>
+using namespace std;
 
-
-public class Cadeteria
+class sistema
 {
-    private string nombre;
-    private string telefono;
-    private static Cadeteria instance;
-
-    public string Nombre { get => nombre; set => nombre = value; }
-    public string Telefono { get => telefono; set => telefono = value; }
-
-    private List<Cadete> listadoCadetes = new List<Cadete>();
-    public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
-
-    private List<Pedido> listadoPedidos = new List<Pedido>();
-    public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
-
-    public Cadeteria(string nombre, string telefono)
-    {
-        this.Nombre = nombre;
-        this.Telefono = telefono;
-    }
-
-    public void AgregarCadete(Cadete cadete)
-    {
-        ListadoCadetes.Add(cadete);
-    }
-
-    public void EliminarCadete(Cadete cadete)
-    {
-        ListadoCadetes.Remove(cadete);
-    }
-
-    public static Cadeteria CargarCadeteriaDesdeCSV(string nombre, string telefono, List<Cadete> cadetes)
-    {
-        Cadeteria cadeteria = new Cadeteria(nombre, telefono);
-        cadeteria.ListadoCadetes.AddRange(cadetes);
-        return cadeteria;
-    }
-
-    public decimal CalcularJornal(int cadeteId)
-    {
-        int pedidosEntregados = ListadoPedidos.Count(p => p.Estado == "E" && p.CadeteAsignado != null && p.CadeteAsignado.Id == cadeteId);
-        return pedidosEntregados * 500; // Suponiendo que el pago es de 500 por pedido entregado.
-    }
-
-    public void AsignarCadeteAPedido(int cadeteId, int pedidoId)
-    {
-        Pedido pedido = ListadoPedidos.FirstOrDefault(p => p.Numero == pedidoId);
-        if (pedido != null)
-        {
-            Cadete cadete = ListadoCadetes.FirstOrDefault(c => c.Id == cadeteId);
-            pedido.CadeteAsignado = cadete;
-        }
-    }
-
-    public void AgregarPedido(int numero, string observacion, string nombreCliente, string direccionCliente, string telefonoCliente, string estado)
-    {
-        Cliente cliente = new Cliente(nombreCliente, direccionCliente, telefonoCliente, "");
-        Pedido pedido = new Pedido(numero, observacion, cliente, estado, null);
-        ListadoPedidos.Add(pedido);
-    }
-
-    public void EliminarPedido(Pedido pedido)
-    {
-        ListadoPedidos.Remove(pedido);
-    }
-
-    public string CalcularEstado()
-    {
-        if (ListadoPedidos.Any(p => p.Estado == "P"))
-        {
-            return "P"; // Pendiente
-        }
-        else if (ListadoPedidos.Any(p => p.Estado == "C"))
-        {
-            return "C"; // Cancelado
-        }
-        else
-        {
-            return "E"; // Entregado
-        }
-    }
-
-    public Pedido BuscarPedidoPorNumero(int numeroPedido)
-    {
-        return ListadoPedidos.FirstOrDefault(p => p.Numero == numeroPedido);
-    }
-
-    public Cadete BuscarCadetePorId(int idCadete)
-    {
-        return ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
-    }
-
-    public void ReasignarPedidoAPedido(Pedido pedido, Cadete nuevoCadete)
-    {
-        if (pedido.CadeteAsignado != null)
-        {
-            pedido.CadeteAsignado = null;
-        }
-        pedido.CadeteAsignado = nuevoCadete;
-    }
-
-    private Cadeteria()
-    {
+private:
+    
+public:
+    sistema(/* args */){
         // 
     }
 
-    public static Cadeteria GetInstance()
-    {
-        if (instance == null)
-        {
-            instance = new Cadeteria();
-        }
-        return instance;
+    ~sistema(){
+        // 
     }
 
+    float facturacion(){
+        // 
+    }
+};
+
+// cuenta.h
+#include <iostream>
+#include "alquiler.h"
+using namespace std;
+
+class cuenta
+{
+private:
+    string correo;
+    string tarjeta;
+    // alquiler** listaAlquileres;
+public:
+    cuenta(){
+        // 
+    }
+
+    ~cuenta(){
+        // 
+    }
+
+    float montoPagarPorMes(){
+        // 
+    }
+};
+
+// alquiler.h
+#include <iostream>
+using namespace std;
+
+class alquiler
+{
+private:
+    // peliculas** listaPeliculas;
+    string fechaProduccion;
+public:
+    alquiler(/* args */);
+    ~alquiler();
+};
+
+alquiler::alquiler(/* args */)
+{
 }
 
-[HttpPost("AgregarPedido")]
-    public ActionResult AgregarPedido([FromBody] Pedido pedido)
-    {
-        // Implementa lógica para agregar un pedido
-        
-        CadeteriaInstance.AgregarPedido(pedido); // Reemplaza esto con la lógica real
-        return Ok();
+alquiler::~alquiler()
+{
+}
+
+// pelicula.h
+#include <iostream>
+using namespace std;
+
+class pelicula
+{
+private:
+    string nombre;
+    string fechaEstreno;
+    float precioBase;
+
+public:
+    pelicula(){
+        // 
     }
+
+    ~pelicula(){
+        // 
+    }
+
+    virtual float costoAlquiler(){
+        // 
+    }
+    
+};
+
+// peliculaInternacional.h
+#include <iostream>
+#include "pelicula.h"
+using namespace std;
+
+class peliculaInternacional : public pelicula
+{
+private:
+    string pais;
+public:
+    peliculaInternacional(/* args */){
+        // 
+    }
+
+    ~peliculaInternacional(){
+        // 
+    }
+
+    virtual float costoAlquiler(){
+        // 
+    }
+};
+
+// peliculaNacional.h
+#include <iostream>
+#include "pelicula.h"
+using namespace std;
+
+class peliculaNacional : public pelicula
+{
+private:
+    // no tiene
+public:
+    peliculaNacional(/* args */){
+        // 
+    }
+    ~peliculaNacional(){
+        // 
+    }
+
+    float costoAlquiler(){
+        // 
+    }
+};
+
+
+
+
 
