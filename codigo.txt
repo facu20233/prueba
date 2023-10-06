@@ -1,171 +1,266 @@
-Resumen
-Se necesita computarizar el proceso de alquiler de películas de una empresa que ofrece
-distribución digital de contenido multimedia (streaming) a través de Internet. Esta empresa ofrece
-un servicio de alquiler de películas online. El usuario al alquilar una película mediante este sistema
-tiene disponible la misma por un día con solo conectarse a su cuenta a través de un dispositivo
-smart. A fin de mes se realiza la facturación al cliente en función de las películas alquiladas en ese
-período.
-Tareas
-1) Teniendo en cuenta los siguientes requerimientos del sistema, realice un diagrama de clases
-detallado que incluya: atributos, métodos y relaciones, notas y/o aclaraciones que crea
-conveniente:
-• La cuenta del usuario le permite conectarse a través de un dispositivo smart y acceder al
-contenido digital. De cada cuenta de usuario se conoce la dirección de correo electrónico
-e información de la tarjeta de crédito, además de los alquileres realizados.
-• Desde una cuenta de usuario se puede calcular el monto a pagar en un determinado mes
-del año. El monto a pagar en un determinado mes se calcula como el monto fijo que se
-cobra por el servicio de streaming (monto común a todas las cuentas) más el costo de
-cada una de las películas alquiladas durante el mes que se desea facturar.
-• De cada alquiler se registra la/s película/s alquiladas (con un máximo de 5 películas por
-alquiler) y la fecha en la que se produce el mismo.
-• De cada película se registra el nombre, fecha de estreno y el precio base de alquiler. Las
-películas pueden ser Nacionales o Internacionales. De las películas Internacionales se
-conoce además su país de origen. Para favorecer al cine nacional, el costo de alquilar
-cualquier película Internacional tiene un incremento del 30% sobre el precio base de la
-película. En cambio, las películas Nacionales cuentan con un descuento del 20% sobre
-el precio base solo si pasaron más de 10 años desde su fecha de estreno. 
+// tarea.cs
+namespace EspacioTarea;
 
-// sistema.h
-#include <iostream>
-using namespace std;
-
-class sistema
+public class Tarea
 {
-private:
-    
-public:
-    sistema(/* args */){
-        // 
-    }
-
-    ~sistema(){
-        // 
-    }
-
-    float facturacion(){
-        // 
-    }
-};
-
-// cuenta.h
-#include <iostream>
-#include "alquiler.h"
-using namespace std;
-
-class cuenta
-{
-private:
-    string correo;
-    string tarjeta;
-    // alquiler** listaAlquileres;
-public:
-    cuenta(){
-        // 
-    }
-
-    ~cuenta(){
-        // 
-    }
-
-    float montoPagarPorMes(){
-        // 
-    }
-};
-
-// alquiler.h
-#include <iostream>
-using namespace std;
-
-class alquiler
-{
-private:
-    // peliculas** listaPeliculas;
-    string fechaProduccion;
-public:
-    alquiler(/* args */);
-    ~alquiler();
-};
-
-alquiler::alquiler(/* args */)
-{
+    public int Id {get;set;}
+    public string Titulo {get;set;}
+    public string Descripcion {get;set;}
+    public Estado estado {get;set;}
 }
 
-alquiler::~alquiler()
+public enum Estado
 {
+    Pendiente, //0
+    EnProgreso, //1
+    Completado, //2
 }
 
-// pelicula.h
-#include <iostream>
-using namespace std;
 
-class pelicula
+// manejoTareas.cs
+namespace EspacioTarea;
+
+public class ManejoTareas
 {
-private:
-    string nombre;
-    string fechaEstreno;
-    float precioBase;
+    private AccesoADatos accesoADatos;
+    private List<Tarea> tareas; //...
 
-public:
-    pelicula(){
-        // 
+    public ManejoTareas()
+    {
+        accesoADatos = new AccesoADatos();
+        tareas = accesoADatos.ObtenerTareas();
     }
 
-    ~pelicula(){
-        // 
+    public List<Tarea> ObtenerTareas()
+    {
+        return accesoADatos.ObtenerTareas();
     }
 
-    virtual float costoAlquiler(){
-        // 
+    // implementacion
+    public Tarea CrearTarea(Tarea tarea)
+    {
+        var tareas = accesoADatos.ObtenerTareas();
+        tarea.Id = ObtenerNuevoId(tareas);
+        tareas.Add(tarea);
+        accesoADatos.GuardarTareas(tareas);
+        return tarea;
     }
-    
-};
 
-// peliculaInternacional.h
-#include <iostream>
-#include "pelicula.h"
-using namespace std;
+    private int ObtenerNuevoId(List<Tarea> tareas)
+    {
+        if (tareas.Count == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return tareas.Max(t => t.Id) + 1;
+        }
+    }
 
-class peliculaInternacional : public pelicula
+    public Tarea ObtenerTareaPorId(int id)
+    {
+        Tarea tareaId = tareas.FirstOrDefault(t => t.Id == id);
+        return tareaId;
+    }
+
+    // void?
+    public void ActualizarTarea(Tarea tareaActualizada)
+    {
+        var tareaActualizar = tareas.FirstOrDefault(t => t.Id == tareaActualizada.Id);
+
+        if (tareaActualizar != null)
+        {
+            tareaActualizar.Titulo = tareaActualizada.Titulo;
+            tareaActualizar.Descripcion = tareaActualizada.Descripcion;
+            tareaActualizar.estado = tareaActualizada.estado;
+
+            // Guarda los cambios en la persistencia de datos.
+            accesoADatos.GuardarTareas(tareas);
+        }
+    }
+
+    // void?
+    public void EliminarTarea(int id)
+    {
+        var tareaExistente = tareas.FirstOrDefault(t => t.Id == id);
+
+        if (tareaExistente != null)
+        {
+            tareas.Remove(tareaExistente);
+
+            // Guarda los cambios en la persistencia de datos.
+            accesoADatos.GuardarTareas(tareas);
+        }
+    }
+    public List<Tarea> ObtenerTodasLasTareas()
+    {
+        return tareas;
+    }
+
+    public List<Tarea> ObtenerTareasCompletadas()
+    {
+        var tareasCompletadas = tareas.Where(t => t.estado == Estado.Completado).ToList();
+        return tareasCompletadas;
+    }
+
+}
+
+// AccesoADatos.cs
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+namespace EspacioTarea;
+
+// persistencia
+public class AccesoADatos
 {
-private:
-    string pais;
-public:
-    peliculaInternacional(/* args */){
-        // 
+    private string ruta = "tareas.json"; // Ruta del archivo JSON de persistencia
+
+    public List<Tarea> ObtenerTareas()
+    {   
+        var objetos = new List<Tarea>();
+
+        if (File.Exists(ruta))
+        {
+            string objetosJson = File.ReadAllText(ruta);
+            return JsonSerializer.Deserialize<List<Tarea>>(objetosJson);
+        }
+        else
+        {
+            return objetos;
+        }
     }
 
-    ~peliculaInternacional(){
-        // 
+    public void GuardarTareas(List<Tarea> objetos)
+    {
+        string objetosJson = JsonSerializer.Serialize(objetos);
+        File.WriteAllText(ruta, objetosJson);
     }
+}
 
-    virtual float costoAlquiler(){
-        // 
-    }
-};
+// tareaController
+using Microsoft.AspNetCore.Mvc;
+namespace EspacioTarea;
 
-// peliculaNacional.h
-#include <iostream>
-#include "pelicula.h"
-using namespace std;
-
-class peliculaNacional : public pelicula
+[ApiController]
+[Route("[controller]")]
+public class tareaController : ControllerBase
 {
-private:
-    // no tiene
-public:
-    peliculaNacional(/* args */){
-        // 
+    private ManejoTareas manejoTareas;
+
+    private readonly ILogger<tareaController> _logger;
+
+    public tareaController(ILogger<tareaController> logger)
+    {
+        _logger = logger;
+        manejoTareas = new ManejoTareas();
     }
-    ~peliculaNacional(){
-        // 
+
+    [HttpPost("crearTarea")]
+    public ActionResult<Tarea> CrearTarea(Tarea tarea)
+    {
+
+        var nuevaTarea = manejoTareas.CrearTarea(tarea);
+        if (nuevaTarea != null)
+        {
+            return Ok(tarea);
+        }
+        else
+        {
+            return BadRequest(null);
+        }
     }
 
-    float costoAlquiler(){
+    [HttpGet("obtenerTareaId")]
+    public ActionResult<Tarea> ObtenerTarea(int id)
+    {
         // 
+        var tarea = manejoTareas.ObtenerTareaPorId(id);
+
+        if (tarea == null)
+        {
+            return NotFound(); // Devuelve 404 Not Found si no se encuentra la tarea.
+        }
+
+        return Ok(tarea); // Devuelve la tarea si se encuentra.
     }
-};
+
+    [HttpPut("ActualizarTarea")]
+    public ActionResult<Tarea> ActualizarTarea(int id, Tarea tareaActualizada)
+    {
+        var tareaExistente = manejoTareas.ObtenerTareaPorId(id);
+
+        if (tareaExistente == null)
+        {
+            return NotFound(); // Devuelve 404 Not Found si la tarea no se encuentra.
+        }
+
+        // Actualiza la información de la tarea existente con la nueva información.
+        tareaExistente.Titulo = tareaActualizada.Titulo;
+        tareaExistente.Descripcion = tareaActualizada.Descripcion;
+        tareaExistente.estado = tareaActualizada.estado;
+
+        // Guarda los cambios en la persistencia de datos.
+        manejoTareas.ActualizarTarea(tareaExistente);
+
+        return Ok(tareaExistente); // Devuelve la tarea actualizada.
+    }
+
+    [HttpDelete("borrarTarea")]
+    public ActionResult<Tarea> EliminarTarea(int id)
+    {
+        var tareaExistente = manejoTareas.ObtenerTareaPorId(id);
+
+        if (tareaExistente == null)
+        {
+            return NotFound(); // Devuelve 404 Not Found si la tarea no se encuentra.
+        }
+
+        manejoTareas.EliminarTarea(id); // Llama al método para eliminar la tarea.
+
+        return NoContent(); // Devuelve 204 No Content para indicar que la tarea se eliminó con éxito.
+    }
+
+    [HttpGet("ListarTareas")]
+    public ActionResult<Tarea> ListarTodasLasTareas()
+    {
+        var tareas = manejoTareas.ObtenerTodasLasTareas();
+
+        if (tareas == null || tareas.Count == 0)
+        {
+            return NotFound(); // Devuelve 404 Not Found si no hay tareas.
+        }
+
+        return Ok(tareas); // Devuelve la lista de tareas si existen tareas.
+    }
+
+    [HttpGet("completadas")]
+    public ActionResult<Tarea> ListarTareasCompletadas()
+    {
+        var tareasCompletadas = manejoTareas.ObtenerTareasCompletadas();
+
+        if (tareasCompletadas == null || tareasCompletadas.Count == 0)
+        {
+            return NotFound(); // Devuelve 404 Not Found si no hay tareas completadas.
+        }
+
+        return Ok(tareasCompletadas); // Devuelve la lista de tareas completadas si existen.
+    }
 
 
 
-
+    // [HttpGet(Name = "GetWeatherForecast")]
+    // public IEnumerable<WeatherForecast> Get()
+    // {
+    //     return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+    //     {
+    //         Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+    //         TemperatureC = Random.Shared.Next(-20, 55),
+    //         Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+    //     })
+    //     .ToArray();
+    // }
+}
 
