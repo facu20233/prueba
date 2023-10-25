@@ -1,266 +1,83 @@
-// tarea.cs
-namespace EspacioTarea;
+#include <iostream>
 
-public class Tarea
-{
-    public int Id {get;set;}
-    public string Titulo {get;set;}
-    public string Descripcion {get;set;}
-    public Estado estado {get;set;}
+// Definición de la estructura de un nodo
+struct Node {
+    int data;
+    Node* next;
+};
+
+class Queue {
+private:
+    Node* front;
+    Node* rear;
+
+public:
+    // Constructor
+    Queue() {
+        front = nullptr;
+        rear = nullptr;
+    }
+
+    // Destructor para liberar la memoria
+    ~Queue() {
+        while (!isEmpty()) {
+            dequeue();
+        }
+    }
+
+    // Función para verificar si la cola está vacía
+    bool isEmpty() {
+        return front == nullptr;
+    }
+
+    // Función para agregar un elemento al final de la cola
+    void enqueue(int item) {
+        Node* newNode = new Node;
+        newNode->data = item;
+        newNode->next = nullptr;
+
+        if (isEmpty()) {
+            front = newNode;
+            rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+
+    // Función para quitar un elemento del frente de la cola
+    void dequeue() {
+        if (isEmpty()) {
+            std::cout << "La cola está vacía. No se puede realizar una operación de eliminación." << std::endl;
+            return;
+        }
+
+        Node* temp = front;
+        front = front->next;
+        delete temp;
+    }
+
+    // Función para obtener el elemento en el frente de la cola
+    int getFront() {
+        if (isEmpty()) {
+            std::cout << "La cola está vacía." << std::endl;
+            return -1; // Valor sentinela
+        }
+        return front->data;
+    }
+};
+
+int main() {
+    Queue myQueue;
+
+    myQueue.enqueue(10);
+    myQueue.enqueue(20);
+    myQueue.enqueue(30);
+
+    std::cout << "Elemento en el frente de la cola: " << myQueue.getFront() << std::endl;
+
+    myQueue.dequeue();
+    std::cout << "Elemento en el frente de la cola después de la eliminación: " << myQueue.getFront() << std::endl;
+
+    return 0;
 }
-
-public enum Estado
-{
-    Pendiente, //0
-    EnProgreso, //1
-    Completado, //2
-}
-
-
-// manejoTareas.cs
-namespace EspacioTarea;
-
-public class ManejoTareas
-{
-    private AccesoADatos accesoADatos;
-    private List<Tarea> tareas; //...
-
-    public ManejoTareas()
-    {
-        accesoADatos = new AccesoADatos();
-        tareas = accesoADatos.ObtenerTareas();
-    }
-
-    public List<Tarea> ObtenerTareas()
-    {
-        return accesoADatos.ObtenerTareas();
-    }
-
-    // implementacion
-    public Tarea CrearTarea(Tarea tarea)
-    {
-        var tareas = accesoADatos.ObtenerTareas();
-        tarea.Id = ObtenerNuevoId(tareas);
-        tareas.Add(tarea);
-        accesoADatos.GuardarTareas(tareas);
-        return tarea;
-    }
-
-    private int ObtenerNuevoId(List<Tarea> tareas)
-    {
-        if (tareas.Count == 0)
-        {
-            return 1;
-        }
-        else
-        {
-            return tareas.Max(t => t.Id) + 1;
-        }
-    }
-
-    public Tarea ObtenerTareaPorId(int id)
-    {
-        Tarea tareaId = tareas.FirstOrDefault(t => t.Id == id);
-        return tareaId;
-    }
-
-    // void?
-    public void ActualizarTarea(Tarea tareaActualizada)
-    {
-        var tareaActualizar = tareas.FirstOrDefault(t => t.Id == tareaActualizada.Id);
-
-        if (tareaActualizar != null)
-        {
-            tareaActualizar.Titulo = tareaActualizada.Titulo;
-            tareaActualizar.Descripcion = tareaActualizada.Descripcion;
-            tareaActualizar.estado = tareaActualizada.estado;
-
-            // Guarda los cambios en la persistencia de datos.
-            accesoADatos.GuardarTareas(tareas);
-        }
-    }
-
-    // void?
-    public void EliminarTarea(int id)
-    {
-        var tareaExistente = tareas.FirstOrDefault(t => t.Id == id);
-
-        if (tareaExistente != null)
-        {
-            tareas.Remove(tareaExistente);
-
-            // Guarda los cambios en la persistencia de datos.
-            accesoADatos.GuardarTareas(tareas);
-        }
-    }
-    public List<Tarea> ObtenerTodasLasTareas()
-    {
-        return tareas;
-    }
-
-    public List<Tarea> ObtenerTareasCompletadas()
-    {
-        var tareasCompletadas = tareas.Where(t => t.estado == Estado.Completado).ToList();
-        return tareasCompletadas;
-    }
-
-}
-
-// AccesoADatos.cs
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-namespace EspacioTarea;
-
-// persistencia
-public class AccesoADatos
-{
-    private string ruta = "tareas.json"; // Ruta del archivo JSON de persistencia
-
-    public List<Tarea> ObtenerTareas()
-    {   
-        var objetos = new List<Tarea>();
-
-        if (File.Exists(ruta))
-        {
-            string objetosJson = File.ReadAllText(ruta);
-            return JsonSerializer.Deserialize<List<Tarea>>(objetosJson);
-        }
-        else
-        {
-            return objetos;
-        }
-    }
-
-    public void GuardarTareas(List<Tarea> objetos)
-    {
-        string objetosJson = JsonSerializer.Serialize(objetos);
-        File.WriteAllText(ruta, objetosJson);
-    }
-}
-
-// tareaController
-using Microsoft.AspNetCore.Mvc;
-namespace EspacioTarea;
-
-[ApiController]
-[Route("[controller]")]
-public class tareaController : ControllerBase
-{
-    private ManejoTareas manejoTareas;
-
-    private readonly ILogger<tareaController> _logger;
-
-    public tareaController(ILogger<tareaController> logger)
-    {
-        _logger = logger;
-        manejoTareas = new ManejoTareas();
-    }
-
-    [HttpPost("crearTarea")]
-    public ActionResult<Tarea> CrearTarea(Tarea tarea)
-    {
-
-        var nuevaTarea = manejoTareas.CrearTarea(tarea);
-        if (nuevaTarea != null)
-        {
-            return Ok(tarea);
-        }
-        else
-        {
-            return BadRequest(null);
-        }
-    }
-
-    [HttpGet("obtenerTareaId")]
-    public ActionResult<Tarea> ObtenerTarea(int id)
-    {
-        // 
-        var tarea = manejoTareas.ObtenerTareaPorId(id);
-
-        if (tarea == null)
-        {
-            return NotFound(); // Devuelve 404 Not Found si no se encuentra la tarea.
-        }
-
-        return Ok(tarea); // Devuelve la tarea si se encuentra.
-    }
-
-    [HttpPut("ActualizarTarea")]
-    public ActionResult<Tarea> ActualizarTarea(int id, Tarea tareaActualizada)
-    {
-        var tareaExistente = manejoTareas.ObtenerTareaPorId(id);
-
-        if (tareaExistente == null)
-        {
-            return NotFound(); // Devuelve 404 Not Found si la tarea no se encuentra.
-        }
-
-        // Actualiza la información de la tarea existente con la nueva información.
-        tareaExistente.Titulo = tareaActualizada.Titulo;
-        tareaExistente.Descripcion = tareaActualizada.Descripcion;
-        tareaExistente.estado = tareaActualizada.estado;
-
-        // Guarda los cambios en la persistencia de datos.
-        manejoTareas.ActualizarTarea(tareaExistente);
-
-        return Ok(tareaExistente); // Devuelve la tarea actualizada.
-    }
-
-    [HttpDelete("borrarTarea")]
-    public ActionResult<Tarea> EliminarTarea(int id)
-    {
-        var tareaExistente = manejoTareas.ObtenerTareaPorId(id);
-
-        if (tareaExistente == null)
-        {
-            return NotFound(); // Devuelve 404 Not Found si la tarea no se encuentra.
-        }
-
-        manejoTareas.EliminarTarea(id); // Llama al método para eliminar la tarea.
-
-        return NoContent(); // Devuelve 204 No Content para indicar que la tarea se eliminó con éxito.
-    }
-
-    [HttpGet("ListarTareas")]
-    public ActionResult<Tarea> ListarTodasLasTareas()
-    {
-        var tareas = manejoTareas.ObtenerTodasLasTareas();
-
-        if (tareas == null || tareas.Count == 0)
-        {
-            return NotFound(); // Devuelve 404 Not Found si no hay tareas.
-        }
-
-        return Ok(tareas); // Devuelve la lista de tareas si existen tareas.
-    }
-
-    [HttpGet("completadas")]
-    public ActionResult<Tarea> ListarTareasCompletadas()
-    {
-        var tareasCompletadas = manejoTareas.ObtenerTareasCompletadas();
-
-        if (tareasCompletadas == null || tareasCompletadas.Count == 0)
-        {
-            return NotFound(); // Devuelve 404 Not Found si no hay tareas completadas.
-        }
-
-        return Ok(tareasCompletadas); // Devuelve la lista de tareas completadas si existen.
-    }
-
-
-
-    // [HttpGet(Name = "GetWeatherForecast")]
-    // public IEnumerable<WeatherForecast> Get()
-    // {
-    //     return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-    //     {
-    //         Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-    //         TemperatureC = Random.Shared.Next(-20, 55),
-    //         Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-    //     })
-    //     .ToArray();
-    // }
-}
-
