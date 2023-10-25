@@ -1,83 +1,77 @@
 #include <iostream>
 
-// Definición de la estructura de un nodo
-struct Node {
-    int data;
-    Node* next;
-};
-
-class Queue {
+// Clase Fila (ya implementada en el TP2)
+class Fila {
 private:
-    Node* front;
-    Node* rear;
+    // Debes tener una estructura de datos interna para almacenar los elementos de la fila.
+    int elementos[100];
+    int frente;
+    int final;
 
 public:
-    // Constructor
-    Queue() {
-        front = nullptr;
-        rear = nullptr;
+    Fila() {
+        frente = -1;
+        final = -1;
     }
 
-    // Destructor para liberar la memoria
-    ~Queue() {
-        while (!isEmpty()) {
-            dequeue();
-        }
-    }
-
-    // Función para verificar si la cola está vacía
-    bool isEmpty() {
-        return front == nullptr;
-    }
-
-    // Función para agregar un elemento al final de la cola
+    // Otras funciones de la clase Fila para agregar y quitar elementos.
     void enqueue(int item) {
-        Node* newNode = new Node;
-        newNode->data = item;
-        newNode->next = nullptr;
+        // Implementa la lógica para agregar elementos a la fila.
+    }
 
-        if (isEmpty()) {
-            front = newNode;
-            rear = newNode;
+    int dequeue() {
+        // Implementa la lógica para quitar elementos de la fila.
+    }
+
+    // Otras funciones de la clase Fila.
+};
+
+// Clase IteradorDeFila para iterar sobre objetos del tipo Fila
+class IteradorDeFila {
+private:
+    Fila* fila; // Apuntador a la fila que se desea iterar
+    int indice; // Índice actual del iterador
+
+public:
+    IteradorDeFila(Fila* fila) : fila(fila), indice(fila->getFrente()) {}
+
+    // Función para avanzar al siguiente elemento en la fila
+    void avanzar() {
+        if (indice == fila->getFinal()) {
+            // Has llegado al final de la fila
+            indice = -1;
         } else {
-            rear->next = newNode;
-            rear = newNode;
+            // Avanza al siguiente elemento
+            indice++;
         }
     }
 
-    // Función para quitar un elemento del frente de la cola
-    void dequeue() {
-        if (isEmpty()) {
-            std::cout << "La cola está vacía. No se puede realizar una operación de eliminación." << std::endl;
-            return;
-        }
-
-        Node* temp = front;
-        front = front->next;
-        delete temp;
-    }
-
-    // Función para obtener el elemento en el frente de la cola
-    int getFront() {
-        if (isEmpty()) {
-            std::cout << "La cola está vacía." << std::endl;
+    // Función para obtener el elemento actual
+    int obtenerElementoActual() {
+        if (indice == -1) {
+            std::cout << "El iterador ha llegado al final de la fila." << std::endl;
             return -1; // Valor sentinela
         }
-        return front->data;
+        return fila->getElementoEn(indice);
+    }
+
+    // Función para verificar si el iterador ha llegado al final de la fila
+    bool haTerminado() {
+        return (indice == -1);
     }
 };
 
 int main() {
-    Queue myQueue;
+    Fila miFila;
+    
+    // Agrega elementos a la fila
 
-    myQueue.enqueue(10);
-    myQueue.enqueue(20);
-    myQueue.enqueue(30);
-
-    std::cout << "Elemento en el frente de la cola: " << myQueue.getFront() << std::endl;
-
-    myQueue.dequeue();
-    std::cout << "Elemento en el frente de la cola después de la eliminación: " << myQueue.getFront() << std::endl;
-
+    IteradorDeFila iterador(&miFila);
+    while (!iterador.haTerminado()) {
+        int elemento = iterador.obtenerElementoActual();
+        std::cout << "Elemento actual: " << elemento << std::endl;
+        iterador.avanzar();
+    }
+    
     return 0;
 }
