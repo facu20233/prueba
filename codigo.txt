@@ -16,7 +16,6 @@
 ○ id (int) - PK - NOT NULL
 ○ nombre_de_usuario - (text) - NOT NULL
 
-INTRODUCCIÓN
 Considerando la base de datos Sqlite del tablero Kanban del Trabajo anterior crear
 una API RESTful que permita a los usuarios administrar tableros, tareas y usuarios. La
 aplicación debe utilizar una base de datos SQLite para almacenar la información.
@@ -32,17 +31,14 @@ Clase Usuarios:
 ● NombreDeUsuario
 Clase Tablero
 ● int Id
-● int IdTablero
+● int IdUsuarioPropietario
 ● string Nombre
-● int Estado
 ● string Descripcion
-● string Color
-● int? IdUsuarioAsignado
 Clase Tareas
 ● int Id
-● int IdUsuarioPropietario
 ● string Nombre
 ● string Descripcion
 ● string Color
 ● EstadoTarea* Estado
+● int? IdUsuarioAsignado
 *. EstadoTarea es un Enum con los valores Ideas, ToDo, Doing, Review, Done
