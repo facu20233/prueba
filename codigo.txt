@@ -1,83 +1,30 @@
-1) Descargar la aplicación SQLite Studio (https://sqlitestudio.pl) y cree las siguientes tablas
-● Tablero
-○ id (int) - PK - NOT NULL
-○ id_usuario_propietario (int) - FK - NOT NULL
-○ nombre (text) - NOT NULL
-○ descripcion (text)
-● Tarea
-○ id (int) - PK - NOT NULL
-○ id_tablero (int) - FK - NOT NULL
-○ nombre (text)- NOT NULL
-○ estado (int) - NOT NULL
-○ descripcion (text)
-○ color (string)
-○ id_usuario_asignado (int)
-● Usuario
-○ id (int) - PK - NOT NULL
-○ nombre_de_usuario - (text) - NOT NULL
-
-Considerando la base de datos Sqlite del tablero Kanban del Trabajo anterior crear
-una API RESTful que permita a los usuarios administrar tableros, tareas y usuarios. La
-aplicación debe utilizar una base de datos SQLite para almacenar la información.
-1) Agregando Dependencia para utilizar SQLite con ADO.Net
-Primero se debe instalar las dependencias de SQLite ejecutando el siguiente
-comando en la consola de administración de paquetes:
-> dotnet add package System.Data.SQLite
-2) Creando las clases modelo:
-Crear una carpeta llamada Models donde ubicará los modelos de su aplicación. A
-continuación se detallan los modelos que deben crear:
-Clase Usuarios:
-● int Id
-● NombreDeUsuario
-Clase Tablero
-● int Id
-● int IdUsuarioPropietario
-● string Nombre
-● string Descripcion
-Clase Tareas
-● int Id
-● string Nombre
-● string Descripcion
-● string Color
-● EstadoTarea* Estado
-● int? IdUsuarioAsignado
-*. EstadoTarea es un Enum con los valores Ideas, ToDo, Doing, Review, Done
-
-
---------
-
-// Clase Usuario
-public class Usuario
-{
-    public int Id { get; set; }
-    public string NombreDeUsuario { get; set; }
-}
-
-// Clase Tablero
-public class Tablero
-{
-    public int Id { get; set; }
-    public int IdUsuarioPropietario { get; set; }
-    public string Nombre { get; set; }
-    public string Descripcion { get; set; }
-}
-
-// Clase Tarea
-public class Tarea
-{
-    public int Id { get; set; }
-    public string Nombre { get; set; }
-    public string Descripcion { get; set; }
-    public string Color { get; set; }
-    public EstadoTarea Estado { get; set; }
-    public int? IdUsuarioAsignado { get; set; }
-}
-
-public enum EstadoTarea
-{
-    Ideas,
-    ToDo,
-    Doing,
-    Review,
-    Done
-}
+Repositorio de Usuarios:
+Crear un repositorio llamado UsuarioRepository para gestionar todas las
+operaciones relacionadas con usuarios. Este repositorio debe incluir métodos para:
+● Crear un nuevo usuario. (recibe un objeto Usuario)
+● Modificar un usuario existente. (recibe un Id y un objeto Usuario)
+● Listar todos los usuarios registrados. (devuelve un List de Usuarios)
+● Obtener detalles de un usuario por su ID. (recibe un Id y devuelve un Usuario)
+● Eliminar un usuario por ID
+Repositorio de Tableros:
+Crear un repositorio llamado TableroRepository para gestionar todas las operaciones
+relacionadas con tableros. Este repositorio debe incluir métodos para:
+● Crear un nuevo tablero (devuelve un objeto Tablero)
+● Modificar un tablero existente (recibe un id y un objeto Tablero)
+● Obtener detalles de un tablero por su ID. (recibe un id y devuelve un Tablero)
+● Listar todos los tableros existentes (devuelve un list de tableros)
+● Listar todos los tableros de un usuario específico. (recibe un IdUsuario, devuelve un
+list de tableros)
+● Eliminar un tablero por ID
+Repositorio de Tareas:
+Crear un repositorio llamado TareaRepository para gestionar todas las operaciones
+relacionadas con tareas. Este repositorio debe incluir métodos para:
+● Crear una nueva tarea en un tablero. (recibe un idTablero, devuelve un objeto Tarea)
+● Modificar una tarea existente. (recibe un id y un objeto Tarea)
+● Obtener detalles de una tarea por su ID. (devuelve un objeto Tarea)
+● Listar todas las tareas asignadas a un usuario específico.(recibe un idUsuario,
+devuelve un list de tareas)
+● Listar todas las tareas de un tablero específico. (recibe un idTablero, devuelve un list
+de tareas)
+● Eliminar una tarea (recibe un IdTarea)
+● Asignar Usuario a Tarea (recibe idUsuario y un idTarea)
