@@ -28,3 +28,124 @@ devuelve un list de tareas)
 de tareas)
 ● Eliminar una tarea (recibe un IdTarea)
 ● Asignar Usuario a Tarea (recibe idUsuario y un idTarea)
+
+------
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
+public class UsuarioRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public UsuarioRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public Usuario CrearUsuario(Usuario usuario)
+    {
+        _context.Usuarios.Add(usuario);
+        _context.SaveChanges();
+        return usuario;
+    }
+
+    public Usuario ModificarUsuario(int id, Usuario usuario)
+    {
+        var existingUsuario = _context.Usuarios.Find(id);
+
+        if (existingUsuario == null)
+        {
+            // Manejar el caso en que el usuario no se encuentra
+            return null;
+        }
+
+        existingUsuario.NombreDeUsuario = usuario.NombreDeUsuario;
+        _context.SaveChanges();
+        return existingUsuario;
+    }
+
+    public List<Usuario> ListarUsuarios()
+    {
+        return _context.Usuarios.ToList();
+    }
+
+    public Usuario ObtenerUsuarioPorId(int id)
+    {
+        return _context.Usuarios.Find(id);
+    }
+
+    public void EliminarUsuario(int id)
+    {
+        var usuario = _context.Usuarios.Find(id);
+        if (usuario != null)
+        {
+            _context.Usuarios.Remove(usuario);
+            _context.SaveChanges();
+        }
+    }
+}
+
+public class TableroRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public TableroRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public Tablero CrearTablero(Tablero tablero)
+    {
+        _context.Tableros.Add(tablero);
+        _context.SaveChanges();
+        return tablero;
+    }
+
+    public Tablero ModificarTablero(int id, Tablero tablero)
+    {
+        var existingTablero = _context.Tableros.Find(id);
+
+        if (existingTablero == null)
+        {
+            // Manejar el caso en que el tablero no se encuentra
+            return null;
+        }
+
+        existingTablero.Nombre = tablero.Nombre;
+        existingTablero.Descripcion = tablero.Descripcion;
+        // Otras propiedades a actualizar
+
+        _context.SaveChanges();
+        return existingTablero;
+    }
+
+    public Tablero ObtenerTableroPorId(int id)
+    {
+        return _context.Tableros.Find(id);
+    }
+
+    public List<Tablero> ListarTableros()
+    {
+        return _context.Tableros.ToList();
+    }
+
+    public List<Tablero> ListarTablerosPorUsuario(int idUsuario)
+    {
+        return _context.Tableros.Where(t => t.IdUsuarioPropietario == idUsuario).ToList();
+    }
+
+    public void EliminarTablero(int id)
+    {
+        var tablero = _context.Tableros.Find(id);
+        if (tablero != null)
+        {
+            _context.Tableros.Remove(tablero);
+            _context.SaveChanges();
+        }
+    }
+}
+
