@@ -1,77 +1,48 @@
-#include <iostream>
+1) Descargar la aplicación SQLite Studio (https://sqlitestudio.pl) y cree las siguientes tablas
+● Tablero
+○ id (int) - PK - NOT NULL
+○ id_usuario_propietario (int) - FK - NOT NULL
+○ nombre (text) - NOT NULL
+○ descripcion (text)
+● Tarea
+○ id (int) - PK - NOT NULL
+○ id_tablero (int) - FK - NOT NULL
+○ nombre (text)- NOT NULL
+○ estado (int) - NOT NULL
+○ descripcion (text)
+○ color (string)
+○ id_usuario_asignado (int)
+● Usuario
+○ id (int) - PK - NOT NULL
+○ nombre_de_usuario - (text) - NOT NULL
 
-// Clase Fila (ya implementada en el TP2)
-class Fila {
-private:
-    // Debes tener una estructura de datos interna para almacenar los elementos de la fila.
-    int elementos[100];
-    int frente;
-    int final;
-
-public:
-    Fila() {
-        frente = -1;
-        final = -1;
-    }
-
-    // Otras funciones de la clase Fila para agregar y quitar elementos.
-    void enqueue(int item) {
-        // Implementa la lógica para agregar elementos a la fila.
-    }
-
-    int dequeue() {
-        // Implementa la lógica para quitar elementos de la fila.
-    }
-
-    // Otras funciones de la clase Fila.
-};
-
-// Clase IteradorDeFila para iterar sobre objetos del tipo Fila
-class IteradorDeFila {
-private:
-    Fila* fila; // Apuntador a la fila que se desea iterar
-    int indice; // Índice actual del iterador
-
-public:
-    IteradorDeFila(Fila* fila) : fila(fila), indice(fila->getFrente()) {}
-
-    // Función para avanzar al siguiente elemento en la fila
-    void avanzar() {
-        if (indice == fila->getFinal()) {
-            // Has llegado al final de la fila
-            indice = -1;
-        } else {
-            // Avanza al siguiente elemento
-            indice++;
-        }
-    }
-
-    // Función para obtener el elemento actual
-    int obtenerElementoActual() {
-        if (indice == -1) {
-            std::cout << "El iterador ha llegado al final de la fila." << std::endl;
-            return -1; // Valor sentinela
-        }
-        return fila->getElementoEn(indice);
-    }
-
-    // Función para verificar si el iterador ha llegado al final de la fila
-    bool haTerminado() {
-        return (indice == -1);
-    }
-};
-
-int main() {
-    Fila miFila;
-    
-    // Agrega elementos a la fila
-
-    IteradorDeFila iterador(&miFila);
-    while (!iterador.haTerminado()) {
-        int elemento = iterador.obtenerElementoActual();
-        std::cout << "Elemento actual: " << elemento << std::endl;
-        iterador.avanzar();
-    }
-    
-    return 0;
-}
+INTRODUCCIÓN
+Considerando la base de datos Sqlite del tablero Kanban del Trabajo anterior crear
+una API RESTful que permita a los usuarios administrar tableros, tareas y usuarios. La
+aplicación debe utilizar una base de datos SQLite para almacenar la información.
+1) Agregando Dependencia para utilizar SQLite con ADO.Net
+Primero se debe instalar las dependencias de SQLite ejecutando el siguiente
+comando en la consola de administración de paquetes:
+> dotnet add package System.Data.SQLite
+2) Creando las clases modelo:
+Crear una carpeta llamada Models donde ubicará los modelos de su aplicación. A
+continuación se detallan los modelos que deben crear:
+Clase Usuarios:
+● int Id
+● NombreDeUsuario
+Clase Tablero
+● int Id
+● int IdTablero
+● string Nombre
+● int Estado
+● string Descripcion
+● string Color
+● int? IdUsuarioAsignado
+Clase Tareas
+● int Id
+● int IdUsuarioPropietario
+● string Nombre
+● string Descripcion
+● string Color
+● EstadoTarea* Estado
+*. EstadoTarea es un Enum con los valores Ideas, ToDo, Doing, Review, Done
