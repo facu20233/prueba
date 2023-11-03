@@ -42,3 +42,42 @@ Clase Tareas
 ● EstadoTarea* Estado
 ● int? IdUsuarioAsignado
 *. EstadoTarea es un Enum con los valores Ideas, ToDo, Doing, Review, Done
+
+
+--------
+
+// Clase Usuario
+public class Usuario
+{
+    public int Id { get; set; }
+    public string NombreDeUsuario { get; set; }
+}
+
+// Clase Tablero
+public class Tablero
+{
+    public int Id { get; set; }
+    public int IdUsuarioPropietario { get; set; }
+    public string Nombre { get; set; }
+    public string Descripcion { get; set; }
+}
+
+// Clase Tarea
+public class Tarea
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; }
+    public string Descripcion { get; set; }
+    public string Color { get; set; }
+    public EstadoTarea Estado { get; set; }
+    public int? IdUsuarioAsignado { get; set; }
+}
+
+public enum EstadoTarea
+{
+    Ideas,
+    ToDo,
+    Doing,
+    Review,
+    Done
+}
