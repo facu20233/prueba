@@ -1,151 +1,54 @@
-Repositorio de Usuarios:
-Crear un repositorio llamado UsuarioRepository para gestionar todas las
-operaciones relacionadas con usuarios. Este repositorio debe incluir métodos para:
-● Crear un nuevo usuario. (recibe un objeto Usuario)
-● Modificar un usuario existente. (recibe un Id y un objeto Usuario)
-● Listar todos los usuarios registrados. (devuelve un List de Usuarios)
-● Obtener detalles de un usuario por su ID. (recibe un Id y devuelve un Usuario)
-● Eliminar un usuario por ID
-Repositorio de Tableros:
-Crear un repositorio llamado TableroRepository para gestionar todas las operaciones
-relacionadas con tableros. Este repositorio debe incluir métodos para:
-● Crear un nuevo tablero (devuelve un objeto Tablero)
-● Modificar un tablero existente (recibe un id y un objeto Tablero)
-● Obtener detalles de un tablero por su ID. (recibe un id y devuelve un Tablero)
-● Listar todos los tableros existentes (devuelve un list de tableros)
-● Listar todos los tableros de un usuario específico. (recibe un IdUsuario, devuelve un
-list de tableros)
-● Eliminar un tablero por ID
-Repositorio de Tareas:
-Crear un repositorio llamado TareaRepository para gestionar todas las operaciones
-relacionadas con tareas. Este repositorio debe incluir métodos para:
-● Crear una nueva tarea en un tablero. (recibe un idTablero, devuelve un objeto Tarea)
-● Modificar una tarea existente. (recibe un id y un objeto Tarea)
-● Obtener detalles de una tarea por su ID. (devuelve un objeto Tarea)
-● Listar todas las tareas asignadas a un usuario específico.(recibe un idUsuario,
-devuelve un list de tareas)
-● Listar todas las tareas de un tablero específico. (recibe un idTablero, devuelve un list
-de tareas)
-● Eliminar una tarea (recibe un IdTarea)
-● Asignar Usuario a Tarea (recibe idUsuario y un idTarea)
+@model List<Usuario>
 
-------
+<h2>Listado de Usuarios</h2>
 
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-
-public class UsuarioRepository
-{
-    private readonly ApplicationDbContext _context;
-
-    public UsuarioRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
-    public Usuario CrearUsuario(Usuario usuario)
-    {
-        _context.Usuarios.Add(usuario);
-        _context.SaveChanges();
-        return usuario;
-    }
-
-    public Usuario ModificarUsuario(int id, Usuario usuario)
-    {
-        var existingUsuario = _context.Usuarios.Find(id);
-
-        if (existingUsuario == null)
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre de Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
         {
-            // Manejar el caso en que el usuario no se encuentra
-            return null;
+            <tr>
+                <td>@usuario.Id</td>
+                <td>@usuario.NombreDeUsuario</td>
+                <td>
+                    <a asp-action="Modificar" asp-route-id="@usuario.Id">Modificar</a> |
+                    <a asp-action="Eliminar" asp-route-id="@usuario.Id">Eliminar</a>
+                </td>
+            </tr>
         }
+    </tbody>
+</table>
 
-        existingUsuario.NombreDeUsuario = usuario.NombreDeUsuario;
-        _context.SaveChanges();
-        return existingUsuario;
-    }
+@model Usuario
 
-    public List<Usuario> ListarUsuarios()
-    {
-        return _context.Usuarios.ToList();
-    }
+<h2>Crear Usuario</h2>
 
-    public Usuario ObtenerUsuarioPorId(int id)
-    {
-        return _context.Usuarios.Find(id);
-    }
+<form asp-action="Crear" method="post">
+    <div class="form-group">
+        <label asp-for="NombreDeUsuario"></label>
+        <input asp-for="NombreDeUsuario" class="form-control" />
+        <span asp-validation-for="NombreDeUsuario" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
 
-    public void EliminarUsuario(int id)
-    {
-        var usuario = _context.Usuarios.Find(id);
-        if (usuario != null)
-        {
-            _context.Usuarios.Remove(usuario);
-            _context.SaveChanges();
-        }
-    }
-}
+@model Usuario
 
-public class TableroRepository
-{
-    private readonly ApplicationDbContext _context;
+<h2>Modificar Usuario</h2>
 
-    public TableroRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
-    public Tablero CrearTablero(Tablero tablero)
-    {
-        _context.Tableros.Add(tablero);
-        _context.SaveChanges();
-        return tablero;
-    }
-
-    public Tablero ModificarTablero(int id, Tablero tablero)
-    {
-        var existingTablero = _context.Tableros.Find(id);
-
-        if (existingTablero == null)
-        {
-            // Manejar el caso en que el tablero no se encuentra
-            return null;
-        }
-
-        existingTablero.Nombre = tablero.Nombre;
-        existingTablero.Descripcion = tablero.Descripcion;
-        // Otras propiedades a actualizar
-
-        _context.SaveChanges();
-        return existingTablero;
-    }
-
-    public Tablero ObtenerTableroPorId(int id)
-    {
-        return _context.Tableros.Find(id);
-    }
-
-    public List<Tablero> ListarTableros()
-    {
-        return _context.Tableros.ToList();
-    }
-
-    public List<Tablero> ListarTablerosPorUsuario(int idUsuario)
-    {
-        return _context.Tableros.Where(t => t.IdUsuarioPropietario == idUsuario).ToList();
-    }
-
-    public void EliminarTablero(int id)
-    {
-        var tablero = _context.Tableros.Find(id);
-        if (tablero != null)
-        {
-            _context.Tableros.Remove(tablero);
-            _context.SaveChanges();
-        }
-    }
-}
+<form asp-action="Modificar" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="NombreDeUsuario"></label>
+        <input asp-for="NombreDeUsuario" class="form-control" />
+        <span asp-validation-for="NombreDeUsuario" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>
 
