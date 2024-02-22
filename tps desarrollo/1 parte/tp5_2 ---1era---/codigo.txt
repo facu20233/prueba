@@ -1,0 +1,18 @@
+----------mes------------
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string fecha = "09-12-18";
+
+    // Obtén el mes extrayendo los caracteres en la posición 3 y 4 (0-indexed).
+    std::string mes_str = fecha.substr(3, 2);
+
+    // Convierte el mes a un entero.
+    int mes = std::stoi(mes_str);
+
+    // Imprime el mes.
+    std::cout << "El mes es: " << mes << std::endl;
+
+    return 0;
+}

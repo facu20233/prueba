@@ -1,0 +1,23 @@
+progenitor(harry, X). //los padres
+progenitor(X, rose). //hijo no tiene
+progenitor(mollyWeasly, X), progenitor(X, hugo). // padre, hijo: no tiene
+progenitor(X, fred), progenitor(X, ron). //hijo, hijo: no tiene
+
+c) Como formular las siguientes preguntas en Prolog?
+- Quien es el progenitor de Ginny?
+progenitor(ginny, X). //padre ginny
+
+- Tiene Hermione algun hijo?
+progenitor(X, hermione).
+
+- Quienes son los abuelos de Lily Luna? //james y lily
+abuelo(X,Z):- progenitor(X,Y), progenitor(Y,Z). //regla teoria
+abuelo(lilyLuna, X). //si 4 abuelos
+
+d) Agregar los predicados femenino y masculino para cada uno de los integrantes de la
+Familia de Harry Potter. Ejemplo:
+
+femenino(ginny).
+masculino(harry).
+
+

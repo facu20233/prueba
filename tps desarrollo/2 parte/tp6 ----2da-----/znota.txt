@@ -1,0 +1,3 @@
+- arreglo (2)
+- lista enlazada (1)
+- pila (2)

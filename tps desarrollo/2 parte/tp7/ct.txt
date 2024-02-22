@@ -1,0 +1,19 @@
+https://chat.openai.com/share/afc58751-d3a1-48cc-8f02-0bb2277180c4
+
+Nombre Edad Estado Civil 
+Luis 20 Soltero 
+Juan 72 Viudo 
+Pedro 40 Casado 
+Julia 17 Casada 
+María 46 Soltera 
+Andrés 50 Casado 
+Rocío 67 Soltera 
+
+Civil Nombre Edad Estado Civil
+Joaquín 15 Soltero
+Cecilia 35 Soltera
+Felicia 60 Soltera
+Santiago 45 Casado
+Verónica 34 Casada
+Eugenia 70 Viuda
+Carlos 73 Casado

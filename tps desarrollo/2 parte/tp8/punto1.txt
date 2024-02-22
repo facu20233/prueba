@@ -1,0 +1,15 @@
+1. Explique qué hace el siguiente código Haskell y de un nombre más adecuado a la función.
+
+
+misterio x y
+ | (y==0 || x==0) = 0  //0 5
+ | x<0 && y<0 = misterio (-x) (-y)  // 2 negativo
+ | y<0 = misterio y x  // 1 es negativo lo invierte
+ | otherwise = x + misterio x (y - 1)  // e.o.c suma x + recur
+
+- devuelve 0
+- 
+
+ej: 3 4
+3+3+3+3
+

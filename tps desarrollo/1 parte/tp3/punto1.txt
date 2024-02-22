@@ -1,0 +1,12 @@
+1: es una asociacion de agregacion, lo que quiere decir que si eliminamos la clase vector, la clase producto sigue existiendo
+
+2: es una asociacion de composicion, lo que quiere decir que si eliminamos la clase vector la clase producto se elimina
+
+---------
+
+a Entre vector y producto existe una asociacion de agregacion .
+
+b. Implemente los diagramas en C++, teniendo en cuenta el análisis realizado previamente.
+
+c. Escriba un programa de prueba para verificar que su implementación funciona
+correctamente.

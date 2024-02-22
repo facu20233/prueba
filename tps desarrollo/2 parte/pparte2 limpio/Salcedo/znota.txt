@@ -1,0 +1,5 @@
+- archivo arreglo solo
+- hacer un iterador normal, 
+- una funcion de iteradores par
+
+- programa de prueba

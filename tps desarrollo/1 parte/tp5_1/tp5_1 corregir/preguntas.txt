@@ -1,0 +1,8 @@
+private o protected (ej evento)
+
+agreg o comp
+
+vector<evento*> si
+push_back
+
+comp o agreg
